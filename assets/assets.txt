@@ -7,6 +7,7 @@ Menu/Game/sound.png
 Menu/Game/soundOff.png
 Menu/Home/exit.png
 Menu/Home/homePlay.png
+Menu/Home/homeScreen.png
 Menu/Home/homeSetting.png
 Menu/Home/sound.png
 Menu/Home/soundOff.png

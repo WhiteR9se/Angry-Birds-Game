@@ -8,53 +8,88 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.angry_birds.Core;
-import org.w3c.dom.Text;
 
-public class HomeScreen implements Screen{
-    private Core game;
+public class HomeScreen implements Screen {
+    private final Core game;
     private final SpriteBatch batch;
     private final Texture background;
     private final Sprite sprite;
     private final Music music;
-    private Sprite play, exit, settings, sound, sound_off;
+    private final Sprite play, exit, settings, sound, sound_off;
 
-    public HomeScreen() {
-        //this.game = game;
+    public HomeScreen(Core game) {
+        this.game = game;
         batch = new SpriteBatch();
-        background = new Texture("background.jpg");
+        background = new Texture("Menu/Home/homeScreen.png");
         sprite = new Sprite(background);
+
+        // Play background music
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         music.setLooping(true);
         music.play();
-        music.setVolume(50);
+        music.setVolume(0.5f);
 
-        // #sprites
+        // Initialize buttons and other sprites
         play = new Sprite(new Texture(Gdx.files.internal("Menu/Home/homePlay.png")));
         exit = new Sprite(new Texture(Gdx.files.internal("Menu/Home/exit.png")));
-        settings = new Sprite(new Texture(Gdx.files.internal("Menu/Home/exit.png")));
+        settings = new Sprite(new Texture(Gdx.files.internal("Menu/Home/homeSetting.png")));
         sound = new Sprite(new Texture(Gdx.files.internal("Menu/Home/sound.png")));
         sound_off = new Sprite(new Texture(Gdx.files.internal("Menu/Home/soundOff.png")));
 
-        // give them positions
-
+        // Set positions for the sprites (example)
+        play.setPosition(100, 150);
+        exit.setPosition(100, 50);
+        settings.setPosition(100, 250);
+        sound.setPosition(100, 350);
+        sound_off.setPosition(100, 450);
     }
 
-    public void show(){}
-    public void render() {
+    @Override
+    public void show() {
+        // This method is called when the screen becomes the current screen
+    }
+
+    @Override
+    public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.begin();
-        sprite.draw(batch);
+        sprite.draw(batch); // Draw the background
+        play.draw(batch); // Draw buttons (example)
+        exit.draw(batch);
+        settings.draw(batch);
+        sound.draw(batch);
+        sound_off.draw(batch);
         batch.end();
     }
-    public void render(float x){};
-    public void resize(int a, int b){};
-    public void pause(){};
-    public void resume(){};
-    public void hide(){};
+
+    @Override
+    public void resize(int width, int height) {
+        // Handle window resizing if necessary
+    }
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resume() {}
+
+    @Override
+    public void hide() {
+        // This method is called when the screen is no longer the current screen
+        music.stop();
+    }
+
+    @Override
     public void dispose() {
         batch.dispose();
         background.dispose();
         music.dispose();
+        play.getTexture().dispose();
+        exit.getTexture().dispose();
+        settings.getTexture().dispose();
+        sound.getTexture().dispose();
+        sound_off.getTexture().dispose();
     }
 }
