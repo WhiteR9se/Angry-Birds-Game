@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -21,7 +22,8 @@ public class Core extends Game implements ApplicationListener {
     private Texture image;
     private OrthographicCamera camera;
     private Viewport viewport;
-
+    public Music music;
+    public boolean isSoundOn = true;
     // 16:9 aspect ratio
 //    private final float WORLD_WIDTH = 1920;
 //    private final float WORLD_HEIGHT = 1080;
@@ -33,14 +35,17 @@ public class Core extends Game implements ApplicationListener {
 //        viewport.apply();
         batch = new SpriteBatch();
         image = new Texture("SplashScreen.png");
-
+        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        music.setLooping(true);
+        music.play();
+        music.setVolume(20);
         // Schedule a task to switch to HomeScreen after 3 seconds
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 setScreen(new HomeScreen(Core.this));
             }
-        }, 3); // 3 seconds delay
+        }, 1); // 3 seconds delay
     }
 
     @Override

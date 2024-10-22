@@ -9,39 +9,35 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Core;
 
-public class LevelScreen implements Screen {
+public class HomeSettingScreen implements Screen {
     private final Core game;
     private final SpriteBatch batch;
     private final Texture background;
     private final Sprite bgSprite;
-    private final Sprite level1, level2, level3;
     private final Sprite backtoHome;
     private final Texture backtoHomeHover;
+    private final Sprite sound;
+    private final Texture soundOffTexture;
 
-    public LevelScreen(Core game) {
+    public HomeSettingScreen(Core game) {
         this.game = game;
         batch = new SpriteBatch();
-        background = new Texture("Menu/Levels/blankBG.png");
+        background = new Texture("Menu/HomeSetting/homeSetting.png");
         bgSprite = new Sprite(background);
-        backtoHome = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/backToHome.png")));
-        backtoHomeHover = new Texture(Gdx.files.internal("Menu/Levels/backToHomeHover.png"));
+        backtoHome = new Sprite(new Texture(Gdx.files.internal("Menu/HomeSetting/homeSettingBack.png")));
+        backtoHomeHover = new Texture(Gdx.files.internal("Menu/HomeSetting/homeSettingBackHover.png"));
+        sound = new Sprite(new Texture(Gdx.files.internal("Menu/HomeSetting/sound.png")));
+        soundOffTexture = new Texture(Gdx.files.internal("Menu/HomeSetting/soundOff.png"));
 
-        // Initialize level icons
-        level1 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level1.png")));
-        level2 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level2.png")));
-        level3 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level3.png")));
+        backtoHome.setPosition(750, 630);
+        sound.setPosition(1000, 510);
+        sound.setSize(130, 130);
 
-        backtoHome.setPosition(10, 900);
-        level1.setSize(250, 240);
-        level2.setSize(250, 240);
-        level3.setSize(250, 240);
-        level1.setPosition(500, 425);
-        level2.setPosition(1100, 425);
-        level3.setPosition(800, 150);
-    }
+        // Set the initial sound texture based on the sound state
+        if (!game.isSoundOn) {
+            sound.setTexture(soundOffTexture);
+        }
 
-    @Override
-    public void show() {
         // Set up input processor to handle touch/click events
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -52,6 +48,39 @@ public class LevelScreen implements Screen {
 
                 if (backtoHome.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new HomeScreen(game));
+                } else if (sound.getBoundingRectangle().contains(x, y)) {
+                    toggleSound();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void toggleSound() {
+        if (game.isSoundOn) {
+            game.music.setVolume(0);
+            sound.setTexture(soundOffTexture);
+        } else {
+            game.music.setVolume(20);
+            sound.setTexture(new Texture(Gdx.files.internal("Menu/HomeSetting/sound.png")));
+        }
+        game.isSoundOn = !game.isSoundOn;
+    }
+
+    @Override
+    public void show() {
+        // This method is called when the screen becomes the current screen
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                // Convert screen coordinates to world coordinates
+                float x = screenX;
+                float y = Gdx.graphics.getHeight() - screenY;
+
+                if (backtoHome.getBoundingRectangle().contains(x, y)) {
+                    game.setScreen(new HomeScreen(game));
+                } else if (sound.getBoundingRectangle().contains(x, y)) {
+                    toggleSound();
                 }
                 return true;
             }
@@ -69,16 +98,14 @@ public class LevelScreen implements Screen {
         if (backtoHome.getBoundingRectangle().contains(mouseX, mouseY)) {
             backtoHome.setTexture(backtoHomeHover);
         } else {
-            backtoHome.setTexture(new Texture(Gdx.files.internal("Menu/Levels/backToHome.png")));
+            backtoHome.setTexture(new Texture(Gdx.files.internal("Menu/HomeSetting/homeSettingBack.png")));
         }
 
         batch.begin();
         bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bgSprite.draw(batch); // Draw the background
         backtoHome.draw(batch);
-        level1.draw(batch); // Draw level icons
-        level2.draw(batch);
-        level3.draw(batch);
+        sound.draw(batch);
         batch.end();
     }
 
@@ -102,10 +129,9 @@ public class LevelScreen implements Screen {
     public void dispose() {
         batch.dispose();
         background.dispose();
-        level1.getTexture().dispose();
-        level2.getTexture().dispose();
-        level3.getTexture().dispose();
         backtoHome.getTexture().dispose();
         backtoHomeHover.dispose();
+        sound.getTexture().dispose();
+        soundOffTexture.dispose();
     }
 }
