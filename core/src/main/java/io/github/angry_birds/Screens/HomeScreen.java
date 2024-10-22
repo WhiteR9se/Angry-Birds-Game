@@ -13,35 +13,35 @@ public class HomeScreen implements Screen {
     private final Core game;
     private final SpriteBatch batch;
     private final Texture background;
-    private final Sprite sprite;
+    private final Sprite bgSprite;
     private final Music music;
-    private final Sprite play, exit, settings, sound, sound_off;
+    private final Sprite play, exit, settings;
 
     public HomeScreen(Core game) {
         this.game = game;
         batch = new SpriteBatch();
         background = new Texture("Menu/Home/homeScreen.png");
-        sprite = new Sprite(background);
+        bgSprite = new Sprite(background);
 
         // Play background music
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         music.setLooping(true);
         music.play();
-        music.setVolume(0.5f);
+        music.setVolume(0);
 
         // Initialize buttons and other sprites
         play = new Sprite(new Texture(Gdx.files.internal("Menu/Home/homePlay.png")));
         exit = new Sprite(new Texture(Gdx.files.internal("Menu/Home/exit.png")));
         settings = new Sprite(new Texture(Gdx.files.internal("Menu/Home/homeSetting.png")));
-        sound = new Sprite(new Texture(Gdx.files.internal("Menu/Home/sound.png")));
-        sound_off = new Sprite(new Texture(Gdx.files.internal("Menu/Home/soundOff.png")));
+
 
         // Set positions for the sprites (example)
-        play.setPosition(100, 150);
-        exit.setPosition(100, 50);
-        settings.setPosition(100, 250);
-        sound.setPosition(100, 350);
-        sound_off.setPosition(100, 450);
+        play.setPosition(((Gdx.graphics.getWidth() - play.getWidth()) / 2) , ((Gdx.graphics.getHeight() - play.getHeight()) / 2));
+        play.setSize(300, 285);
+        exit.setPosition(250, 150);
+        exit.setSize(100, 85);
+        settings.setPosition(400, 150);
+        settings.setSize(100, 85);
     }
 
     @Override
@@ -55,12 +55,12 @@ public class HomeScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        sprite.draw(batch); // Draw the background
+        // Set the height of the bgSprite to match the window height
+        bgSprite.setSize(bgSprite.getHeight() * (Gdx.graphics.getWidth() / bgSprite.getHeight()), Gdx.graphics.getHeight());
+        bgSprite.draw(batch); // Draw the background
         play.draw(batch); // Draw buttons (example)
         exit.draw(batch);
         settings.draw(batch);
-        sound.draw(batch);
-        sound_off.draw(batch);
         batch.end();
     }
 
@@ -89,7 +89,5 @@ public class HomeScreen implements Screen {
         play.getTexture().dispose();
         exit.getTexture().dispose();
         settings.getTexture().dispose();
-        sound.getTexture().dispose();
-        sound_off.getTexture().dispose();
     }
 }
