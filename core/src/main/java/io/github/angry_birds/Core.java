@@ -35,17 +35,18 @@ public class Core extends Game implements ApplicationListener {
 //        viewport.apply();
         batch = new SpriteBatch();
         image = new Texture("SplashScreen.png");
-        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        music.setLooping(true);
-        music.play();
-        music.setVolume(20);
-        // Schedule a task to switch to HomeScreen after 3 seconds
+
+        // Schedule a task to switch to HomeScreen after 3 second
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 setScreen(new HomeScreen(Core.this));
             }
-        }, 1); // 3 seconds delay
+        }, 2); // 3 seconds delay
+        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        music.setLooping(true);
+        music.play();
+        music.setVolume(20);
     }
 
     @Override
