@@ -22,6 +22,7 @@ public class GameSettingScreen implements Screen {
     private final Sprite musicButton;
     private final Class<? extends Screen> currentLevel;
     private boolean isMusicOn;
+    private final Texture soundOffTexture;
 
     public GameSettingScreen(Core game, Class<? extends Screen> currentLevel) {
         this.game = game;
@@ -32,12 +33,13 @@ public class GameSettingScreen implements Screen {
 
         musicButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/music.png")));
         soundButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/sound.png")));
+        soundOffTexture = (new Texture(Gdx.files.internal("Menu/GameSetting/soundOff.png")));
         quitToHomeButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/quitToHome.png")));
         restartButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/restart.png")));
         resumeButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/resume.png")));
         backToLevelsButton = new Sprite(new Texture(Gdx.files.internal("Menu/GameSetting/backToLevels.png")));
 
-        soundButton.setPosition(850, 400);
+        soundButton.setPosition(1050, 360);
         soundButton.setSize(200, 200);
         quitToHomeButton.setPosition(650, 200);
         restartButton.setPosition(990, 800);
@@ -45,7 +47,9 @@ public class GameSettingScreen implements Screen {
         backToLevelsButton.setPosition(650, 600);
         musicButton.setPosition(650, 400);
 
-
+        if (!game.isSoundOn) {
+            soundButton.setTexture(soundOffTexture);
+        }
         isMusicOn = true; // Assume music is on initially
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -55,7 +59,7 @@ public class GameSettingScreen implements Screen {
                 float y = Gdx.graphics.getHeight() - screenY;
 
                 if (soundButton.getBoundingRectangle().contains(x, y)) {
-                    toggleMusic();
+                    toggleSound();
                 } else if (quitToHomeButton.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new HomeScreen(game));
                 } else if (restartButton.getBoundingRectangle().contains(x, y)) {
@@ -78,15 +82,15 @@ public class GameSettingScreen implements Screen {
         });
     }
 
-    private void toggleMusic() {
-        if (isMusicOn) {
-            soundButton.setTexture(new Texture(Gdx.files.internal("Menu/GameSetting/soundOff.png")));
-            // Add logic to mute the music
+    private void toggleSound() {
+        if (game.isSoundOn) {
+            game.music.setVolume(0);
+            soundButton.setTexture(soundOffTexture);
         } else {
+            game.music.setVolume(20);
             soundButton.setTexture(new Texture(Gdx.files.internal("Menu/GameSetting/sound.png")));
-            // Add logic to unmute the music
         }
-        isMusicOn = !isMusicOn;
+        game.isSoundOn = !game.isSoundOn;
     }
 
     @Override

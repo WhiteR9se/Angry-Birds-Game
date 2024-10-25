@@ -17,6 +17,7 @@ public class LevelScreen implements Screen {
     private final Sprite level1, level2, level3;
     private final Sprite backtoHome;
     private final Texture backtoHomeHover;
+    private final Texture level1Hover, level2Hover, level3Hover;
 
     public LevelScreen(Core game) {
         this.game = game;
@@ -30,7 +31,9 @@ public class LevelScreen implements Screen {
         level1 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level1.png")));
         level2 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level2.png")));
         level3 = new Sprite(new Texture(Gdx.files.internal("Menu/Levels/level3.png")));
-
+        level1Hover = new Texture(Gdx.files.internal("Menu/Levels/level1Hover.png"));
+        level2Hover = new Texture(Gdx.files.internal("Menu/Levels/level2Hover.png"));
+        level3Hover = new Texture(Gdx.files.internal("Menu/Levels/level3Hover.png"));
         backtoHome.setPosition(10, 900);
         level1.setSize(250, 240);
         level2.setSize(250, 240);
@@ -76,6 +79,25 @@ public class LevelScreen implements Screen {
             backtoHome.setTexture(backtoHomeHover);
         } else {
             backtoHome.setTexture(new Texture(Gdx.files.internal("Menu/Levels/backToHome.png")));
+        }
+
+        // Update level textures based on hover state
+        if (level1.getBoundingRectangle().contains(mouseX, mouseY)) {
+            level1.setTexture(level1Hover);
+        } else {
+            level1.setTexture(new Texture(Gdx.files.internal("Menu/Levels/level1.png")));
+        }
+
+        if (level2.getBoundingRectangle().contains(mouseX, mouseY)) {
+            level2.setTexture(level2Hover);
+        } else {
+            level2.setTexture(new Texture(Gdx.files.internal("Menu/Levels/level2.png")));
+        }
+
+        if (level3.getBoundingRectangle().contains(mouseX, mouseY)) {
+            level3.setTexture(level3Hover);
+        } else {
+            level3.setTexture(new Texture(Gdx.files.internal("Menu/Levels/level3.png")));
         }
 
         batch.begin();

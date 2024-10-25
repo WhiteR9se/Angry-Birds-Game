@@ -18,6 +18,7 @@ public class Level3 implements Screen {
     private final Texture gameSettingHover;
     private final Sprite winDummyButton;
     private final Sprite loseDummyButton;
+    private boolean isGameSettingScreenVisible;
 
     public Level3(Core game) {
         this.game = game;
@@ -35,7 +36,17 @@ public class Level3 implements Screen {
         winDummyButton.setPosition(1500, 50);
         loseDummyButton.setPosition(1700, 50);
 
+        isGameSettingScreenVisible = false;
+
         Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == com.badlogic.gdx.Input.Keys.ESCAPE) {
+                    toggleGameSettingScreen();
+                }
+                return true;
+            }
+
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 float x = screenX;
@@ -51,6 +62,15 @@ public class Level3 implements Screen {
                 return true;
             }
         });
+    }
+
+    private void toggleGameSettingScreen() {
+        if (isGameSettingScreenVisible) {
+            game.setScreen(this);
+        } else {
+            game.setScreen(new GameSettingScreen(game, Level3.class));
+        }
+        isGameSettingScreenVisible = !isGameSettingScreenVisible;
     }
 
     @Override

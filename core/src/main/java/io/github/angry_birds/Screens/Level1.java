@@ -1,6 +1,7 @@
 package io.github.angry_birds.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Core;
+import io.github.angry_birds.Sprites.*;
 
 public class Level1 implements Screen {
     private final Core game;
@@ -18,9 +20,14 @@ public class Level1 implements Screen {
     private final Texture gameSettingHover;
     private final Sprite winDummyButton;
     private final Sprite loseDummyButton;
+    private boolean isGameSettingScreenVisible;
+    private Red red;
+    private Sling sling = null;
 
     public Level1(Core game) {
         this.game = game;
+        this.red = new Red(game);
+        this.sling = sling;
         batch = new SpriteBatch();
         background = new Texture("Menu/Game/background.jpg");
         bgSprite = new Sprite(background);
@@ -28,14 +35,23 @@ public class Level1 implements Screen {
         gameSettingHover = new Texture(Gdx.files.internal("Menu/Game/gameSettingHover.png"));
         winDummyButton = new Sprite(new Texture(Gdx.files.internal("Menu/Game/winDummyButton.png")));
         loseDummyButton = new Sprite(new Texture(Gdx.files.internal("Menu/Game/loseDummyButton.png")));
-
         gameSetting.setPosition(50, 850);
         gameSetting.setSize(200, 200);
 
         winDummyButton.setPosition(1500, 50);
         loseDummyButton.setPosition(1700, 50);
 
+        isGameSettingScreenVisible = false;
+
         Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    toggleGameSettingScreen();
+                }
+                return true;
+            }
+
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 float x = screenX;
@@ -51,6 +67,15 @@ public class Level1 implements Screen {
                 return true;
             }
         });
+    }
+
+    private void toggleGameSettingScreen() {
+        if (isGameSettingScreenVisible) {
+            game.setScreen(this);
+        } else {
+            game.setScreen(new GameSettingScreen(game, Level1.class));
+        }
+        isGameSettingScreenVisible = !isGameSettingScreenVisible;
     }
 
     @Override
@@ -71,6 +96,8 @@ public class Level1 implements Screen {
         }
 
         batch.begin();
+        red.startingPosition();
+        red.drawSprite(batch);
         bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bgSprite.draw(batch);
         gameSetting.draw(batch);

@@ -19,6 +19,8 @@ public class WinScreen implements Screen {
     private final Sprite next;
     private final Texture nextHover;
     private final Class<? extends Screen> nextLevelClass;
+    private final Sprite repeatLevel;
+    private final Texture repeatLevelHover;
 
     public WinScreen(Core game, Class<? extends Screen> nextLevelClass) {
         this.game = game;
@@ -30,9 +32,12 @@ public class WinScreen implements Screen {
         backToLevelHover = new Texture(Gdx.files.internal("Menu/PostGame/backToLevelHover.png"));
         next = new Sprite(new Texture(Gdx.files.internal("Menu/PostGame/next.png")));
         nextHover = new Texture(Gdx.files.internal("Menu/PostGame/nextHover.png"));
-
+        repeatLevel = new Sprite(new Texture(Gdx.files.internal("Menu/PostGame/repeatLevel.png")));
+        repeatLevelHover = new Texture(Gdx.files.internal("Menu/PostGame/repeatLevelHover.png"));
         backToLevel.setPosition(10, 900);
-        next.setPosition(200, 900); // Adjust the position as needed
+
+        repeatLevel.setPosition(900, 200);
+        next.setPosition(790, 390);
     }
 
     @Override
@@ -75,10 +80,15 @@ public class WinScreen implements Screen {
         } else {
             next.setTexture(new Texture(Gdx.files.internal("Menu/PostGame/next.png")));
         }
-
+        if (repeatLevel.getBoundingRectangle().contains(mouseX, mouseY)) {
+            repeatLevel.setTexture(repeatLevelHover);
+        } else {
+            repeatLevel.setTexture(new Texture(Gdx.files.internal("Menu/PostGame/repeatLevel.png")));
+        }
         batch.begin();
         bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bgSprite.draw(batch);
+        repeatLevel.draw(batch);
         backToLevel.draw(batch);
         next.draw(batch);
         batch.end();

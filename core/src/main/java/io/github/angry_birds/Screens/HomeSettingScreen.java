@@ -18,6 +18,7 @@ public class HomeSettingScreen implements Screen {
     private final Texture backtoHomeHover;
     private final Sprite sound;
     private final Texture soundOffTexture;
+    private final Sprite aboutUsButton;
 
     public HomeSettingScreen(Core game) {
         this.game = game;
@@ -28,10 +29,13 @@ public class HomeSettingScreen implements Screen {
         backtoHomeHover = new Texture(Gdx.files.internal("Menu/HomeSetting/homeSettingBackHover.png"));
         sound = new Sprite(new Texture(Gdx.files.internal("Menu/HomeSetting/sound.png")));
         soundOffTexture = new Texture(Gdx.files.internal("Menu/HomeSetting/soundOff.png"));
+        aboutUsButton = new Sprite(new Texture(Gdx.files.internal("Menu/AboutUs/aboutUsButton.png")));
 
         backtoHome.setPosition(750, 630);
         sound.setPosition(1000, 510);
         sound.setSize(130, 130);
+        aboutUsButton.setPosition(1000, 360);
+        aboutUsButton.setSize(130, 130);
 
         // Set the initial sound texture based on the sound state
         if (!game.isSoundOn) {
@@ -50,6 +54,8 @@ public class HomeSettingScreen implements Screen {
                     game.setScreen(new HomeScreen(game));
                 } else if (sound.getBoundingRectangle().contains(x, y)) {
                     toggleSound();
+                } else if (aboutUsButton.getBoundingRectangle().contains(x, y)) {
+                    game.setScreen(new AboutUS(game));
                 }
                 return true;
             }
@@ -81,6 +87,8 @@ public class HomeSettingScreen implements Screen {
                     game.setScreen(new HomeScreen(game));
                 } else if (sound.getBoundingRectangle().contains(x, y)) {
                     toggleSound();
+                } else if (aboutUsButton.getBoundingRectangle().contains(x, y)) {
+                    game.setScreen(new AboutUS(game));
                 }
                 return true;
             }
@@ -106,6 +114,7 @@ public class HomeSettingScreen implements Screen {
         bgSprite.draw(batch); // Draw the background
         backtoHome.draw(batch);
         sound.draw(batch);
+        aboutUsButton.draw(batch);
         batch.end();
     }
 
@@ -133,5 +142,6 @@ public class HomeSettingScreen implements Screen {
         backtoHomeHover.dispose();
         sound.getTexture().dispose();
         soundOffTexture.dispose();
+        aboutUsButton.getTexture().dispose();
     }
 }
