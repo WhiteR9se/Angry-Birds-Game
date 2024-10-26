@@ -19,12 +19,14 @@ public class WinScreen implements Screen {
     private final Sprite next;
     private final Texture nextHover;
     private final Class<? extends Screen> nextLevelClass;
+    private final Class<? extends Screen> currentLevelClass;
     private final Sprite repeatLevel;
     private final Texture repeatLevelHover;
 
-    public WinScreen(Core game, Class<? extends Screen> nextLevelClass) {
+    public WinScreen(Core game, Class<? extends Screen> nextLevelClass, Class<? extends Screen> currentLevelClass) {
         this.game = game;
         this.nextLevelClass = nextLevelClass;
+        this.currentLevelClass = currentLevelClass;
         batch = new SpriteBatch();
         background = new Texture("Menu/PostGame/winScreen.png");
         bgSprite = new Sprite(background);
@@ -53,6 +55,12 @@ public class WinScreen implements Screen {
                 } else if (next.getBoundingRectangle().contains(x, y)) {
                     try {
                         game.setScreen(nextLevelClass.getConstructor(Core.class).newInstance(game));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (repeatLevel.getBoundingRectangle().contains(x, y)) {
+                    try {
+                        game.setScreen(currentLevelClass.getConstructor(Core.class).newInstance(game));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

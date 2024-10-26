@@ -1,4 +1,4 @@
-package io.github.angry_birds.Sprites;
+package io.github.angry_birds.Sprites.Birds;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

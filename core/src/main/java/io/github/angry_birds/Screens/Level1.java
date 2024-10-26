@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Core;
 import io.github.angry_birds.Sprites.*;
+import io.github.angry_birds.Sprites.Birds.Chuck;
+import io.github.angry_birds.Sprites.Birds.Red;
+import io.github.angry_birds.Sprites.Birds.Terence;
+import io.github.angry_birds.Sprites.Pigs.Minion;
 
 public class Level1 implements Screen {
     private final Core game;
@@ -25,12 +29,17 @@ public class Level1 implements Screen {
     private Chuck chuck;
     private Terence terence;
     private Sling sling;
+    private level1Structure level1Structure;
+    private Minion minion;
+
     public Level1(Core game) {
         this.game = game;
         this.red = new Red(game);
         this.chuck = new Chuck(game);
         this.terence = new Terence(game);
         this.sling = new Sling(game);
+        this.level1Structure = new level1Structure(game);
+        this.minion = new Minion(game);
         batch = new SpriteBatch();
         background = new Texture("Menu/Game/background.jpg");
         bgSprite = new Sprite(background);
@@ -63,7 +72,7 @@ public class Level1 implements Screen {
                 if (gameSetting.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new GameSettingScreen(game, Level1.class));
                 } else if (winDummyButton.getBoundingRectangle().contains(x, y)) {
-                    game.setScreen(new WinScreen(game, Level2.class));
+                    game.setScreen(new WinScreen(game, Level2.class, Level1.class));
                 } else if (loseDummyButton.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new LoseScreen(game, Level1.class));
                 }
@@ -105,6 +114,10 @@ public class Level1 implements Screen {
         chuck.draw(batch);
         terence.draw(batch);
         sling.draw(batch);
+        level1Structure.setRotations();
+        level1Structure.setPositions();
+        level1Structure.drawSprites(batch);
+        minion.level1();
         gameSetting.draw(batch);
         winDummyButton.draw(batch);
         loseDummyButton.draw(batch);

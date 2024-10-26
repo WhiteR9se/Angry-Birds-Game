@@ -55,7 +55,7 @@ public class Level2 implements Screen {
                 if (gameSetting.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new GameSettingScreen(game, Level2.class));
                 } else if (winDummyButton.getBoundingRectangle().contains(x, y)) {
-                    game.setScreen(new WinScreen(game, Level3.class));
+                    game.setScreen(new WinScreen(game, Level3.class, Level2.class));
                 } else if (loseDummyButton.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new LoseScreen(game, Level2.class));
                 }
