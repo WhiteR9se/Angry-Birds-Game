@@ -10,11 +10,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.angry_birds.Screens.HomeScreen;
 
-import javax.swing.text.View;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Core extends Game implements ApplicationListener {

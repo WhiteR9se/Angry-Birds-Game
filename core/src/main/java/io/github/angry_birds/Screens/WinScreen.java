@@ -52,7 +52,7 @@ public class WinScreen implements Screen {
 
                 if (backToLevel.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new LevelScreen(game));
-                } else if (next.getBoundingRectangle().contains(x, y)) {
+                } else if (nextLevelClass != null && next.getBoundingRectangle().contains(x, y)) {
                     try {
                         game.setScreen(nextLevelClass.getConstructor(Core.class).newInstance(game));
                     } catch (Exception e) {
@@ -83,7 +83,7 @@ public class WinScreen implements Screen {
             backToLevel.setTexture(new Texture(Gdx.files.internal("Menu/PostGame/backToLevel.png")));
         }
 
-        if (next.getBoundingRectangle().contains(mouseX, mouseY)) {
+        if (nextLevelClass != null && next.getBoundingRectangle().contains(mouseX, mouseY)) {
             next.setTexture(nextHover);
         } else {
             next.setTexture(new Texture(Gdx.files.internal("Menu/PostGame/next.png")));
@@ -98,7 +98,9 @@ public class WinScreen implements Screen {
         bgSprite.draw(batch);
         repeatLevel.draw(batch);
         backToLevel.draw(batch);
-        next.draw(batch);
+        if (nextLevelClass != null) {
+            next.draw(batch);
+        }
         batch.end();
     }
 
@@ -120,7 +122,9 @@ public class WinScreen implements Screen {
         background.dispose();
         backToLevel.getTexture().dispose();
         backToLevelHover.dispose();
-        next.getTexture().dispose();
-        nextHover.dispose();
+        if (nextLevelClass != null) {
+            next.getTexture().dispose();
+            nextHover.dispose();
+        }
     }
 }
