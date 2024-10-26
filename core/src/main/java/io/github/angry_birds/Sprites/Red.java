@@ -3,24 +3,15 @@ package io.github.angry_birds.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.angry_birds.Core;
 
-public class Red extends Sprite{
+public class Red extends Sprite {
     private final Core game;
-    private final Sprite redAsset;
 
     public Red(Core game) {
+        super(new Texture(Gdx.files.internal("Menu/Birds/red.png"))); // Load texture into the inherited Sprite
         this.game = game;
-        redAsset = new Sprite(new Texture(Gdx.files.internal("Menu/Birds/chuckSpeed.png"))); //remove the chuckSpeed when red image in available.
+        this.setPosition(290, 136);  // Set initial position
+        this.setSize(100, 94);
     }
-    public void drawSprite(SpriteBatch batch) {
-        redAsset.draw(batch);
-    }
-    public void startingPosition() {
-        redAsset.setPosition(300, 100);
-    }
-
 }
-
-

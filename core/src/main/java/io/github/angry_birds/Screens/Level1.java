@@ -22,12 +22,15 @@ public class Level1 implements Screen {
     private final Sprite loseDummyButton;
     private boolean isGameSettingScreenVisible;
     private Red red;
-    private Sling sling = null;
-
+    private Chuck chuck;
+    private Terence terence;
+    private Sling sling;
     public Level1(Core game) {
         this.game = game;
         this.red = new Red(game);
-        this.sling = sling;
+        this.chuck = new Chuck(game);
+        this.terence = new Terence(game);
+        this.sling = new Sling(game);
         batch = new SpriteBatch();
         background = new Texture("Menu/Game/background.jpg");
         bgSprite = new Sprite(background);
@@ -96,15 +99,18 @@ public class Level1 implements Screen {
         }
 
         batch.begin();
-        red.startingPosition();
-        red.drawSprite(batch);
         bgSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bgSprite.draw(batch);
+        red.draw(batch);
+        chuck.draw(batch);
+        terence.draw(batch);
+        sling.draw(batch);
         gameSetting.draw(batch);
         winDummyButton.draw(batch);
         loseDummyButton.draw(batch);
         batch.end();
     }
+
 
     @Override
     public void resize(int width, int height) {}

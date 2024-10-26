@@ -1,5 +1,6 @@
 Menu/AboutUs/About.png
 Menu/AboutUs/aboutUsButton.png
+Menu/Birds/Chuck_speed.png
 Menu/Birds/chuck.png
 Menu/Birds/chuckAngry.png
 Menu/Birds/chuckSpeed.png
