@@ -5,8 +5,10 @@
      `lwjgl3/src/main/java/io/github/angry_birds/lwjgl3/Lwjgl3Launcher.java`
 2. **via command line**     
      Run the following command in the root directory to build the project:
+   
      ```./gradlew build```
      next, this command to run the game:
+   
      ```./gradlew lwjgl3:run```
 
 
