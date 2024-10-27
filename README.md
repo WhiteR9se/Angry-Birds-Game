@@ -57,7 +57,7 @@
             │               └───lwjgl3
             └───resources
 
-
+```
 ##### Online sources referred - 
 https://libgdx.com/wiki/start/project-generation 
 
