@@ -44,7 +44,7 @@ public class Core extends Game implements ApplicationListener {
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         music.setLooping(true);
         music.play();
-        music.setVolume(50);
+        music.setVolume(0.5f);
     }
 
     @Override
