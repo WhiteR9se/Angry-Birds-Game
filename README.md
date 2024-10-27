@@ -14,8 +14,51 @@
      ./gradlew lwjgl3:run
      ```
 
+## Directory Structure
 
-###### Online sources referred - 
+```plaintext
+├───.gradle
+├───.idea
+├───assets
+│   └───Menu
+│       ├───AboutUs
+│       ├───Birds
+│       ├───Blocks
+│           ├───Ice
+│           ├───Stone
+│           └───Wood
+│       ├───Game
+│       ├───GameSetting
+│       ├───Home
+│       ├───HomeSetting
+│       ├───Levels
+│       ├───Pigs
+│       └───PostGame
+├───core
+│   └───src
+│       └───main
+│           └───java
+│               └───io
+│                   └───github
+│                       └───angry_birds
+│                           ├───Physics
+│                           ├───Screens
+│                           └───Sprites
+│                               ├───Birds
+│                               ├───Blocks
+│                               └───Pigs
+└───lwjgl3
+    └───src
+        └───main
+            ├───java
+            │   └───io
+            │       └───github
+            │           └───angry_birds
+            │               └───lwjgl3
+            └───resources
+
+
+##### Online sources referred - 
 https://libgdx.com/wiki/start/project-generation 
 
 https://libgdx.com/wiki/
