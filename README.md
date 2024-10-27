@@ -1,5 +1,5 @@
 # Angry Birds Game using LibGDX (Java)
-## How to run
+## How to run : use either one of the following
 1. **using IntelliJ Idea**
      run the following file using the run button in the IDE
      `lwjgl3/src/main/java/io/github/angry_birds/lwjgl3/Lwjgl3Launcher.java`
