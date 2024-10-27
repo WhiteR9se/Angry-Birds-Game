@@ -7,6 +7,8 @@
      Run the following command in the root directory to build the project:
    
      ```./gradlew build```
+
+   
      next, this command to run the game:
    
      ```./gradlew lwjgl3:run```
