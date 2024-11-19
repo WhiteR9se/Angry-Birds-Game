@@ -1,3 +1,4 @@
+/*
 package io.github.angry_birds.Screens;
 
 import com.badlogic.gdx.Gdx;
@@ -10,9 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Core;
 import io.github.angry_birds.Sprites.*;
-import io.github.angry_birds.Sprites.Birds.Chuck;
-import io.github.angry_birds.Sprites.Birds.Red;
-import io.github.angry_birds.Sprites.Birds.Terence;
 import io.github.angry_birds.Sprites.Pigs.Minion;
 
 public class Level1 implements Screen {
@@ -147,3 +145,4 @@ public class Level1 implements Screen {
         loseDummyButton.getTexture().dispose();
     }
 }
+*/

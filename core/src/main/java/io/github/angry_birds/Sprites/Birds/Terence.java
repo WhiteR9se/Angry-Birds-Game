@@ -1,17 +1,48 @@
 package io.github.angry_birds.Sprites.Birds;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import io.github.angry_birds.Core;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
-public class Terence extends Sprite {
-    private final Core game;
+public class Terence {
+    private Body body;
+    private Texture texture;
 
-    public Terence(Core game) {
-        super(new Texture(Gdx.files.internal("Menu/Birds/terence.png"))); // Load texture into the inherited Sprite
-        this.game = game;
-        this.setPosition(0, 130);
-        this.setSize(150, 150);
+    public Terence(World world, float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+        body = world.createBody(bodyDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.5f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 500.0f;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.6f;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        texture = new Texture("Menu/Birds/terence.png");
+        body.setLinearDamping(0f);
+    }
+
+    public void render(SpriteBatch batch) {
+        batch.draw(texture, body.getPosition().x - 0.5f, body.getPosition().y - 0.5f, 50, 50);
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void dispose() {
+        texture.dispose();
     }
 }
