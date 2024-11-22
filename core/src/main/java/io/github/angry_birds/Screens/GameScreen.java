@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         world = new World(new Vector2(0, -9.8f), true);
-        world.setVelocityThreshold(1000f); // Increase the velocity threshold (default is usually low)
+        //world.setVelocityThreshold(1000f); // Increase the velocity threshold (default is usually low)
         debugRenderer = new Box2DDebugRenderer();
 
         // Initialize birds
@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         FixtureDef groundFixtureDef = new FixtureDef();
         groundFixtureDef.shape = groundShape;
         groundFixtureDef.friction = 0.5f;
-        groundFixtureDef.restitution = 1f;
+        groundFixtureDef.restitution = 0.5f;
 
         groundBody.createFixture(groundFixtureDef);
         groundShape.dispose();
@@ -121,8 +121,8 @@ public class GameScreen implements Screen {
                     red.getBody().setType(BodyDef.BodyType.DynamicBody);
 
                     // Calculate launch velocity as the vector difference between positions
-                    Vector2 launchVelocity = new Vector2(initialPosition.sub(dragPosition).x*(100000), initialPosition.sub(dragPosition).y*(100));
-                    red.getBody().applyForceToCenter(launchVelocity, true);
+                   Vector2 launchVelocity = initialPosition.cpy().sub(dragPosition).scl(10000);
+                    red.getBody().setLinearVelocity(launchVelocity);
 
                     // Reset bird to initial position if it falls too low (optional fail-safe)
                     if (red.getBody().getPosition().y < 0) {
@@ -143,7 +143,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        world.step(1/60f, 6, 2);
+        world.step(1/60f, 6, 6);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
