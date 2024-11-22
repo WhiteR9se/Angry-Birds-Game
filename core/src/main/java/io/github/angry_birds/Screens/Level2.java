@@ -23,7 +23,7 @@ public class Level2 implements Screen {
     public Level2(Core game) {
         this.game = game;
         batch = new SpriteBatch();
-        background = new Texture("Menu/Game/background.jpg");
+        background = new Texture("Menu/Game/background.png");
         bgSprite = new Sprite(background);
         gameSetting = new Sprite(new Texture(Gdx.files.internal("Menu/Game/gameSetting.png")));
         gameSettingHover = new Texture(Gdx.files.internal("Menu/Game/gameSettingHover.png"));

@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
     private Chuck chuck;
     private Terence terence;
     private boolean isDragging = false;
-    private Vector2 initialPosition;
+    private Vector2 redInitialPosition, chuckInitialPosition, terenceInitialPosition;
     private Vector2 dragPosition;
     private Texture background;
     private Body groundBody;
@@ -48,10 +48,10 @@ public class GameScreen implements Screen {
         chuck = new Chuck(world, 300, 144); // Position Chuck on the ground
         terence = new Terence(world, 500, 144); // Position Terence on the ground
 
-        sling = new Sling(world, 100, 144);
+        sling = new Sling(world, 280, 144);
 
         // Load background texture
-        background = new Texture("Menu/Game/background.jpg");
+        background = new Texture("Menu/Game/background.png");
 
         // Create ground body
         BodyDef groundBodyDef = new BodyDef();
@@ -68,10 +68,45 @@ public class GameScreen implements Screen {
 
         groundBody.createFixture(groundFixtureDef);
         groundShape.dispose();
+        EdgeShape rightWallShape = new EdgeShape();
+        rightWallShape.set(new Vector2(1920, 1080), new Vector2(1920, 0));
 
+        FixtureDef rightWallFixtureDef = new FixtureDef();
+        rightWallFixtureDef.shape = rightWallShape;
+        rightWallFixtureDef.friction = 0.5f;
+        rightWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(rightWallFixtureDef);
+        rightWallShape.dispose();
+
+        EdgeShape leftWallShape = new EdgeShape();
+        leftWallShape.set(new Vector2(0, 0), new Vector2(0, 1080));
+
+        FixtureDef leftWallFixtureDef = new FixtureDef();
+        leftWallFixtureDef.shape = leftWallShape;
+        leftWallFixtureDef.friction = 0.5f;
+        leftWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(leftWallFixtureDef);
+        leftWallShape.dispose();
+
+        EdgeShape upperWallShape = new EdgeShape();
+        upperWallShape.set(new Vector2(0, 1080), new Vector2(1920, 1080));
+
+        FixtureDef upperWallFixtureDef = new FixtureDef();
+        upperWallFixtureDef.shape = upperWallShape;
+        upperWallFixtureDef.friction = 0.5f;
+        upperWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(upperWallFixtureDef);
+        upperWallShape.dispose();
         // Set initial position of the bird on the sling
-        initialPosition = new Vector2(100, 300);
-        red.getBody().setTransform(initialPosition, 0);
+        redInitialPosition = new Vector2(300, 300);
+        chuckInitialPosition = new Vector2(100, 144);
+        terenceInitialPosition = new Vector2(200, 144);
+        red.getBody().setTransform(redInitialPosition, 0);
+        terence.getBody().setTransform(terenceInitialPosition, 0);
+        chuck.getBody().setTransform(chuckInitialPosition, 0);
         red.getBody().setType(BodyDef.BodyType.StaticBody); // Ensure it's static initially
         Body birdBody = red.getBody();
         birdBody.setMassData(new MassData() {{ mass = 1f; }}); // Reasonable mass
@@ -88,9 +123,9 @@ public class GameScreen implements Screen {
                     dragPosition = new Vector2(touchPos.x, touchPos.y);
 
                     // Limit drag position within a reasonable range around the sling
-                    float maxDragDistance = 50f; // Adjust for desired playability
-                    if (dragPosition.dst(initialPosition) > maxDragDistance) {
-                        dragPosition = initialPosition.cpy().lerp(dragPosition, maxDragDistance / dragPosition.dst(initialPosition));
+                    float maxDragDistance = 500; // Adjust for desired playability
+                    if (dragPosition.dst(redInitialPosition) > maxDragDistance) {
+                        dragPosition = redInitialPosition.cpy().lerp(dragPosition, maxDragDistance / dragPosition.dst(redInitialPosition));
                     }
 
                     red.getBody().setTransform(dragPosition, 0);
@@ -121,12 +156,12 @@ public class GameScreen implements Screen {
                     red.getBody().setType(BodyDef.BodyType.DynamicBody);
 
                     // Calculate launch velocity as the vector difference between positions
-                   Vector2 launchVelocity = initialPosition.cpy().sub(dragPosition).scl(10000);
+                   Vector2 launchVelocity = redInitialPosition.cpy().sub(dragPosition).scl(10000);
                     red.getBody().setLinearVelocity(launchVelocity);
 
                     // Reset bird to initial position if it falls too low (optional fail-safe)
                     if (red.getBody().getPosition().y < 0) {
-                        red.getBody().setTransform(initialPosition, 0);
+                        red.getBody().setTransform(redInitialPosition, 0);
                         red.getBody().setLinearVelocity(0, 0);
                     }
                 }
@@ -161,7 +196,7 @@ public class GameScreen implements Screen {
         shapeRenderer.circle(red.getBody().getPosition().x, red.getBody().getPosition().y, red.getRadius());
         shapeRenderer.end();
 
-        debugRenderer.render(world, camera.combined);
+        // debugRenderer.render(world, camera.combined);
     }
 
     @Override

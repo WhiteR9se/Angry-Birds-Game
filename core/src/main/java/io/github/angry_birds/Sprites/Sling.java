@@ -42,7 +42,7 @@ public class Sling extends Sprite {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(slingTexture, slingBody.getPosition().x - 0.5f, slingBody.getPosition().y - 0.5f, 50, 50);
+        batch.draw(slingTexture, slingBody.getPosition().x - 0.5f, slingBody.getPosition().y - 0.5f, 81, 197);
     }
 
     public void dispose() {

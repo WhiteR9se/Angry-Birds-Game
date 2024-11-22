@@ -45,6 +45,7 @@ Menu/Blocks/sling.png
 Menu/Blocks/sling_left.png
 Menu/Blocks/sling_right.png
 Menu/Game/background.jpg
+Menu/Game/background.png
 Menu/Game/gameSetting.png
 Menu/Game/gameSettingHover.png
 Menu/Game/loseDummyButton.png
