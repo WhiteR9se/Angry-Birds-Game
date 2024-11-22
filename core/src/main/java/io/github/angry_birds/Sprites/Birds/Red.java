@@ -23,9 +23,9 @@ public class Red {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 500f;
+        fixtureDef.density = 1f;
         fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.6f;
+        fixtureDef.restitution = 1f;
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -44,5 +44,9 @@ public class Red {
 
     public void dispose() {
         texture.dispose();
+    }
+
+    public float getRadius() {
+        return 0.5f;
     }
 }
