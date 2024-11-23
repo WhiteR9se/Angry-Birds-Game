@@ -71,7 +71,7 @@ public class GameScreen implements Screen {
 
             @Override
             public void preSolve(Contact contact, Manifold manifold) {
-                if(woodBlock.getHit()>1) {
+                if(woodBlock.getHit()>2) {
                     if ((contact.getFixtureA().getBody().getUserData() instanceof Red && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
                             (contact.getFixtureB().getBody().getUserData() instanceof Red && contact.getFixtureA().getBody().getUserData() instanceof Wood)){
                         contact.setEnabled(false);
