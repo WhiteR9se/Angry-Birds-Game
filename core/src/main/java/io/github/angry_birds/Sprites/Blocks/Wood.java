@@ -28,7 +28,7 @@ public class Wood {
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.1f;
         MassData massData = new MassData();
-        massData.mass = 10f;
+        massData.mass = 2;
         body.setMassData(massData);
 
         body.createFixture(fixtureDef);
@@ -38,6 +38,7 @@ public class Wood {
         damagedTexture = new Texture("Menu/Blocks/Wood/wood2.png");
         hitCount = 0;
         markedForRemoval = false;
+        body.setFixedRotation(true);
     }
 
     public void render(SpriteBatch batch) {
@@ -54,7 +55,6 @@ public class Wood {
         hitCount++;
         if (hitCount >= 1) {
             markedForRemoval = true;
-            System.out.println("Marked for removal");
             cleanUp(world);
         }
     }

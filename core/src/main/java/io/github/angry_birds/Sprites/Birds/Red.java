@@ -32,8 +32,8 @@ public class Red {
         fixture.density = 1f;
         fixture.friction = 0.5f;
         MassData massData = new MassData();
-        massData.mass = 10f;
-        fixture.restitution = 0.6f;
+        massData.mass = 50f;
+        fixture.restitution = 0.25f;
         body.setAngularDamping(5f);
         body.createFixture(fixture);
         body.setLinearVelocity(0, 0);

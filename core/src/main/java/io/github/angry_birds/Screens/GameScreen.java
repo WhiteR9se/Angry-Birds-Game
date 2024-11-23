@@ -209,7 +209,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 10; i++) {
             world.step(1/60f, 6, 2);
         }
 
