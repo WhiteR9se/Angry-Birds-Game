@@ -16,7 +16,7 @@ import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Chuck;
 import io.github.angry_birds.Sprites.Birds.Terence;
 import io.github.angry_birds.Sprites.Sling;
-
+import io.github.angry_birds.Sprites.Blocks.*;
 public class GameScreen implements Screen {
     private Core game;
     private OrthographicCamera camera;
@@ -28,11 +28,12 @@ public class GameScreen implements Screen {
     private Chuck chuck;
     private Terence terence;
     private boolean isDragging = false;
-    private Vector2 redInitialPosition, chuckInitialPosition, terenceInitialPosition;
+    private Vector2 redInitialPosition, chuckInitialPosition, terenceInitialPosition, woodBlockInitialPosition;
     private Vector2 dragPosition;
     private Texture background;
     private Body groundBody;
     private Sling sling;
+    private Wood woodBlock;
 
     public GameScreen(Core game) {
         this.game = game;
@@ -49,7 +50,7 @@ public class GameScreen implements Screen {
         terence = new Terence(world, 500, 144); // Position Terence on the ground
 
         sling = new Sling(world, 280, 144);
-
+        woodBlock = new Wood(world, 1000, 200);
         // Load background texture
         background = new Texture("Menu/Game/background.png");
 
@@ -104,12 +105,12 @@ public class GameScreen implements Screen {
         redInitialPosition = new Vector2(300, 300);
         chuckInitialPosition = new Vector2(100, 144);
         terenceInitialPosition = new Vector2(200, 144);
+        woodBlockInitialPosition = new Vector2(1000, 200);
         red.getBody().setTransform(redInitialPosition, 0);
         terence.getBody().setTransform(terenceInitialPosition, 0);
         chuck.getBody().setTransform(chuckInitialPosition, 0);
+        woodBlock.getBody().setTransform(woodBlockInitialPosition, 0);
         red.getBody().setType(BodyDef.BodyType.StaticBody); // Ensure it's static initially
-        Body birdBody = red.getBody();
-        birdBody.setMassData(new MassData() {{ mass = 1f; }}); // Reasonable mass
 
         // Handle touch input
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -123,7 +124,7 @@ public class GameScreen implements Screen {
                     dragPosition = new Vector2(touchPos.x, touchPos.y);
 
                     // Limit drag position within a reasonable range around the sling
-                    float maxDragDistance = 500; // Adjust for desired playability
+                    float maxDragDistance = 200; // Adjust for desired playability
                     if (dragPosition.dst(redInitialPosition) > maxDragDistance) {
                         dragPosition = redInitialPosition.cpy().lerp(dragPosition, maxDragDistance / dragPosition.dst(redInitialPosition));
                     }
@@ -156,7 +157,7 @@ public class GameScreen implements Screen {
                     red.getBody().setType(BodyDef.BodyType.DynamicBody);
 
                     // Calculate launch velocity as the vector difference between positions
-                   Vector2 launchVelocity = redInitialPosition.cpy().sub(dragPosition).scl(10000);
+                   Vector2 launchVelocity = redInitialPosition.cpy().sub(dragPosition).scl(10);
                     red.getBody().setLinearVelocity(launchVelocity);
 
                     // Reset bird to initial position if it falls too low (optional fail-safe)
@@ -177,8 +178,9 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        world.step(1/60f, 6, 6);
+        for(int i = 0; i < 10; i++) {
+            world.step(1/60f, 6, 2);
+        }
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -187,13 +189,21 @@ public class GameScreen implements Screen {
         red.render(batch);
         chuck.render(batch);
         terence.render(batch);
+        woodBlock.render(batch);
         batch.end();
 
-        // Render hitbox using ShapeRenderer
+        // Check for collision
+        if (red.getBoundingBox().overlaps(woodBlock.getBoundingBox())) {
+            // Handle collision
+            woodBlock.hit();
+        }
+
+        // Render hitboxes using ShapeRenderer
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.circle(red.getBody().getPosition().x, red.getBody().getPosition().y, red.getRadius());
+        shapeRenderer.circle(red.getBody().getPosition().x, red.getBody().getPosition().y, red.getRadius(), 100);
+
         shapeRenderer.end();
 
         // debugRenderer.render(world, camera.combined);
@@ -222,6 +232,7 @@ public class GameScreen implements Screen {
         red.dispose();
         chuck.dispose();
         terence.dispose();
+        woodBlock.dispose();
         background.dispose();
     }
 }
