@@ -18,16 +18,15 @@ public class Red {
         body = world.createBody(bodyDef);
 
         CircleShape shape = new CircleShape();
-        shape.setPosition(new Vector2(0.5f, 0.5f));
-        shape.setRadius(0.5f);
-
+        shape.setPosition(new Vector2(10f, 10f));
+        shape.setRadius(10f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 50f;
-        fixtureDef.friction = 6f;
+        fixtureDef.friction = 0.75f;
         fixtureDef.restitution = 0.25f;
         body.setMassData(new MassData() {
-            {mass = 50f;}
+            {mass = 5f;}
         });
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -36,6 +35,8 @@ public class Red {
         body.setLinearDamping(0f);
 
         boundingBox = new Rectangle(x - 0.5f, y - 0.5f, 1f, 1f);
+        // Prevent rotation
+        body.setFixedRotation(true);
     }
 
     public void render(SpriteBatch batch) {

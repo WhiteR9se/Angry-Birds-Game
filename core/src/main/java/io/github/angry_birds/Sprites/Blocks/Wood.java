@@ -12,6 +12,7 @@ public class Wood {
     private Texture damagedTexture;
     private int hitCount;
     private Rectangle boundingBox;
+    private boolean markedForRemoval;
 
     public Wood(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -25,10 +26,10 @@ public class Wood {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.1f;
         MassData massData = new MassData();
-        massData.mass = 20f;
+        massData.mass = 10f;
         body.setMassData(massData);
 
         body.createFixture(fixtureDef);
@@ -37,24 +38,35 @@ public class Wood {
         texture = new Texture("Menu/Blocks/Wood/wood1.png");
         damagedTexture = new Texture("Menu/Blocks/Wood/wood2.png");
         hitCount = 0;
+        markedForRemoval = false;
 
         boundingBox = new Rectangle(x - 40.5f, y - 40.5f, 81f, 81f);
     }
 
     public void render(SpriteBatch batch) {
-        if (hitCount == 1) {
-            batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
-        } else {
+        if(!markedForRemoval){
+        if (hitCount == 0) {
             batch.draw(texture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
+        } else if (hitCount == 1) {
+            batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
         }
+            }
         updateBoundingBox();
     }
 
-    public void hit() {
+    public void hit(World world) {
         hitCount++;
-        if (hitCount >= 2) {
-            // Logic to remove the block from the world
-            body.getWorld().destroyBody(body);
+        if (hitCount == 1) {
+            markedForRemoval = true;
+            dispose();
+        }
+    }
+
+    //wood.java
+    public void cleanUp(World world) {
+        if (body != null) {
+            world.destroyBody(body);
+            body = null; // Avoid dangling references
         }
     }
 
@@ -66,9 +78,15 @@ public class Wood {
     public Rectangle getBoundingBox() {
         return boundingBox;
     }
+
     public Body getBody() {
         return body;
     }
+
+    public boolean isMarkedForRemoval() {
+        return markedForRemoval;
+    }
+
     private void updateBoundingBox() {
         boundingBox.setPosition(body.getPosition().x - 40.5f, body.getPosition().y - 40.5f);
     }

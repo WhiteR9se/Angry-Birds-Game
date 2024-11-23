@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import java.util.List;
 import io.github.angry_birds.Core;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Sprites.Birds.Red;
@@ -52,7 +53,7 @@ public class GameScreen implements Screen {
         sling = new Sling(world, 280, 144);
         woodBlock = new Wood(world, 1000, 200);
         // Load background texture
-        background = new Texture("Menu/Game/background.png");
+        background = new Texture("Menu/Game/background.jpg");
 
         // Create ground body
         BodyDef groundBodyDef = new BodyDef();
@@ -157,7 +158,7 @@ public class GameScreen implements Screen {
                     red.getBody().setType(BodyDef.BodyType.DynamicBody);
 
                     // Calculate launch velocity as the vector difference between positions
-                   Vector2 launchVelocity = redInitialPosition.cpy().sub(dragPosition).scl(10);
+                    Vector2 launchVelocity = redInitialPosition.cpy().sub(dragPosition).scl(10);
                     red.getBody().setLinearVelocity(launchVelocity);
 
                     // Reset bird to initial position if it falls too low (optional fail-safe)
@@ -178,7 +179,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 6; i++) {
             world.step(1/60f, 6, 2);
         }
 
@@ -195,18 +196,14 @@ public class GameScreen implements Screen {
         // Check for collision
         if (red.getBoundingBox().overlaps(woodBlock.getBoundingBox())) {
             // Handle collision
-            woodBlock.hit();
+            woodBlock.hit(world);
         }
 
-        // Render hitboxes using ShapeRenderer
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.circle(red.getBody().getPosition().x, red.getBody().getPosition().y, red.getRadius(), 100);
-
+        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.rect(woodBlock.getBoundingBox().x, woodBlock.getBoundingBox().y, woodBlock.getBoundingBox().width, woodBlock.getBoundingBox().height);
         shapeRenderer.end();
-
-        // debugRenderer.render(world, camera.combined);
     }
 
     @Override
