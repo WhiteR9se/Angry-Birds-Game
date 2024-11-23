@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -18,6 +19,11 @@ import io.github.angry_birds.Sprites.Birds.Chuck;
 import io.github.angry_birds.Sprites.Birds.Terence;
 import io.github.angry_birds.Sprites.Sling;
 import io.github.angry_birds.Sprites.Blocks.*;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+
 public class GameScreen implements Screen {
     private Core game;
     private OrthographicCamera camera;
@@ -35,6 +41,7 @@ public class GameScreen implements Screen {
     private Body groundBody;
     private Sling sling;
     private Wood woodBlock;
+    private Rectangle woodBounding;
 
     public GameScreen(Core game) {
         this.game = game;
@@ -42,8 +49,31 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
         world = new World(new Vector2(0, -9.8f), true);
+
         //world.setVelocityThreshold(1000f); // Increase the velocity threshold (default is usually low)
         debugRenderer = new Box2DDebugRenderer();
+
+        //look for collisionss
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                if ((contact.getFixtureA().getBody().getUserData() instanceof Red && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                        (contact.getFixtureB().getBody().getUserData() instanceof Red && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
+                    woodBlock.hit(world);
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
+        });
+
+
 
         // Initialize birds
         red = new Red(world, 100, 0); // Position Red on the sling
@@ -192,18 +222,9 @@ public class GameScreen implements Screen {
         terence.render(batch);
         woodBlock.render(batch);
         batch.end();
-
         // Check for collision
-        if (red.getBoundingBox().overlaps(woodBlock.getBoundingBox())) {
-            // Handle collision
-            woodBlock.hit(world);
-        }
+        debugRenderer.render(world, camera.combined);
 
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0, 1, 0, 1);
-        shapeRenderer.rect(woodBlock.getBoundingBox().x, woodBlock.getBoundingBox().y, woodBlock.getBoundingBox().width, woodBlock.getBoundingBox().height);
-        shapeRenderer.end();
     }
 
     @Override

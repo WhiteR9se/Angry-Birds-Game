@@ -11,7 +11,6 @@ public class Wood {
     private Texture texture;
     private Texture damagedTexture;
     private int hitCount;
-    private Rectangle boundingBox;
     private boolean markedForRemoval;
 
     public Wood(World world, float x, float y) {
@@ -39,55 +38,39 @@ public class Wood {
         damagedTexture = new Texture("Menu/Blocks/Wood/wood2.png");
         hitCount = 0;
         markedForRemoval = false;
-
-        boundingBox = new Rectangle(x - 40.5f, y - 40.5f, 81f, 81f);
     }
 
     public void render(SpriteBatch batch) {
-        if(!markedForRemoval){
-        if (hitCount == 0) {
-            batch.draw(texture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
-        } else if (hitCount == 1) {
-            batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
-        }
+        if (!markedForRemoval) {
+            if (hitCount == 0) {
+                batch.draw(texture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
+            } else if (hitCount == 1) {
+                batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
             }
-        updateBoundingBox();
+        }
     }
 
     public void hit(World world) {
         hitCount++;
-        if (hitCount == 1) {
+        if (hitCount >= 1) {
             markedForRemoval = true;
-            dispose();
+            System.out.println("Marked for removal");
+            cleanUp(world);
         }
     }
 
-    //wood.java
     public void cleanUp(World world) {
-        if (body != null) {
-            world.destroyBody(body);
-            body = null; // Avoid dangling references
-        }
+        world.destroyBody(body);
     }
 
-    public void dispose() {
-        texture.dispose();
-        damagedTexture.dispose();
-    }
-
-    public Rectangle getBoundingBox() {
-        return boundingBox;
-    }
 
     public Body getBody() {
         return body;
     }
 
-    public boolean isMarkedForRemoval() {
-        return markedForRemoval;
-    }
 
-    private void updateBoundingBox() {
-        boundingBox.setPosition(body.getPosition().x - 40.5f, body.getPosition().y - 40.5f);
+    public void dispose() {
+        texture.dispose();
+        damagedTexture.dispose();
     }
 }
