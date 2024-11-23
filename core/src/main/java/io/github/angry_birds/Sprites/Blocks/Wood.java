@@ -11,7 +11,7 @@ public class Wood {
     private Texture texture;
     private Texture damagedTexture;
     private int hitCount;
-    private boolean markedForRemoval;
+    public boolean markedForRemoval;
 
     public Wood(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -30,45 +30,44 @@ public class Wood {
         MassData massData = new MassData();
         massData.mass = 2;
         body.setMassData(massData);
-
+        body.setUserData(this);
         body.createFixture(fixtureDef);
         shape.dispose();
 
         texture = new Texture("Menu/Blocks/Wood/wood1.png");
         damagedTexture = new Texture("Menu/Blocks/Wood/wood2.png");
         hitCount = 0;
-        markedForRemoval = false;
         body.setFixedRotation(true);
+        markedForRemoval = false;
     }
 
     public void render(SpriteBatch batch) {
-        if (!markedForRemoval) {
-            if (hitCount == 0) {
+        if (body ==null) {return;}
+        if (hitCount == 0) {
                 batch.draw(texture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
             } else if (hitCount == 1) {
                 batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
             }
-        }
     }
 
     public void hit(World world) {
         hitCount++;
-        if (hitCount >= 1) {
-            markedForRemoval = true;
-            cleanUp(world);
-        }
+    }
+    public void markForRemoval(){
+        markedForRemoval = true;
     }
 
-    public void cleanUp(World world) {
-        world.destroyBody(body);
+    public int getHit(){
+        return hitCount;
     }
-
 
     public Body getBody() {
         return body;
     }
 
-
+    public void setBodyNull(){
+        body = null;
+    }
     public void dispose() {
         texture.dispose();
         damagedTexture.dispose();

@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import java.util.List;
 import io.github.angry_birds.Core;
 import com.badlogic.gdx.InputAdapter;
 import io.github.angry_birds.Sprites.Birds.Red;
@@ -21,7 +20,6 @@ import io.github.angry_birds.Sprites.Sling;
 import io.github.angry_birds.Sprites.Blocks.*;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 
 public class GameScreen implements Screen {
@@ -64,13 +62,31 @@ public class GameScreen implements Screen {
             }
 
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+                if(woodBlock.getHit()==2){
+                    woodBlock.markForRemoval();
+
+                }
+            }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
+            public void preSolve(Contact contact, Manifold manifold) {
+                if(woodBlock.getHit()>1) {
+                    if ((contact.getFixtureA().getBody().getUserData() instanceof Red && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                            (contact.getFixtureB().getBody().getUserData() instanceof Red && contact.getFixtureA().getBody().getUserData() instanceof Wood)){
+                        contact.setEnabled(false);
+                    }
+                }
+            }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {}
+            public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+                if(woodBlock.getHit()==1) {
+                    //woodBlock.markForRemoval();
+                }
+                }
+
+
         });
 
 
@@ -209,6 +225,11 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        /*if(woodBlock.markedForRemoval){
+            world.destroyBody(woodBlock.getBody());
+            woodBlock.setBodyNull();
+        }*/
+
         for(int i = 0; i < 10; i++) {
             world.step(1/60f, 6, 2);
         }
@@ -223,7 +244,7 @@ public class GameScreen implements Screen {
         woodBlock.render(batch);
         batch.end();
         // Check for collision
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 
     }
 
