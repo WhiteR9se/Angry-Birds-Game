@@ -54,9 +54,6 @@ public class Stone {
 
     public void hit(int increment) {
         hitCount += increment;
-        if (hitCount == 2) {
-            markForRemoval();
-        }
     }
 
     public void markForRemoval() {

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import io.github.angry_birds.Sprites.Birds.CurrentBird;
 
 public class Ice {
     private Body body;
@@ -48,9 +47,6 @@ public class Ice {
 
     public void hit(int increment) {
         hitCount += increment;
-        if (hitCount == 1) {
-            markForRemoval();
-        }
     }
     public void markForRemoval(){
         markedForRemoval = true;

@@ -52,9 +52,6 @@ public class Wood {
 
     public void hit(int increment) {
     hitCount += increment;
-    if (hitCount == 2) {
-        markForRemoval();
-    }
 }
     public void markForRemoval(){
         markedForRemoval = true;

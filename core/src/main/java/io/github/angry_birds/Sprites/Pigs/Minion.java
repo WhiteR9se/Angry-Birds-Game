@@ -1,68 +1,71 @@
 package io.github.angry_birds.Sprites.Pigs;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Minion {
     private Body body;
-    private BodyDef bodyDef;
-    private FixtureDef fixture;
     private Texture texture;
-    private TextureRegion textureRegion;
-    private int health;
+    private int hitCount;
+    public boolean markedForRemoval;
 
     public Minion(World world, float x, float y) {
-        health = 100;
-        bodyDef = new BodyDef();
+        BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        fixture = new FixtureDef();
-        texture = new Texture("Menu/Pigs/Minion_pig.png");
-        textureRegion = new TextureRegion(texture);
-        createBody(world, x, y);
-    }
-
-    public void createBody(World world, float x, float y) {
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
-        CircleShape circle = new CircleShape();
-        circle.setRadius(25f);
-        fixture.shape = circle;
-        fixture.density = 1f;
-        fixture.friction = 0.5f;
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0.9f;
         MassData massData = new MassData();
-        massData.mass = 50f;
-        fixture.restitution = 0.25f;
-        body.setAngularDamping(5f);
-        body.createFixture(fixture);
-        body.setLinearVelocity(0, 0);
-        body.setAngularVelocity(0);
-        body.setGravityScale(1);
+        massData.mass = 2;
+        body.setMassData(massData);
         body.setUserData(this);
-        circle.dispose();
+        body.createFixture(fixtureDef);
+        shape.dispose();
+
+        texture = new Texture("Menu/Pigs/Minion_pig.png");
+        hitCount = 0;
+        body.setFixedRotation(true);
+        markedForRemoval = false;
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(textureRegion, body.getPosition().x - 25f, body.getPosition().y - 25f, 50, 50);
+        if (body == null) { return; }
+        if (hitCount == 0) {
+            batch.draw(texture, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
+        }
     }
+
+    public void hit(int increment) {
+        hitCount += increment;
+    }
+
+    public void markForRemoval() {
+        markedForRemoval = true;
+    }
+
+    public int getHit() {
+        return hitCount;
+    }
+
     public Body getBody() {
         return body;
+    }
+
+    public void setBodyNull() {
+        body = null;
     }
 
     public void dispose() {
         texture.dispose();
     }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void hit(World world) {
-        world.destroyBody(body);
-    }
 }
-

@@ -18,11 +18,13 @@ import io.github.angry_birds.Sprites.Birds.CurrentBird;
 import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Chuck;
 import io.github.angry_birds.Sprites.Birds.Terence;
-import io.github.angry_birds.Sprites.Blocks.Ice;
-import io.github.angry_birds.Sprites.Blocks.Stone;
+import io.github.angry_birds.Sprites.Blocks.*;
+import io.github.angry_birds.Sprites.Pigs.Corporal;
+import io.github.angry_birds.Sprites.Pigs.Foreman;
+import io.github.angry_birds.Sprites.Pigs.Minion;
 import io.github.angry_birds.Sprites.Sling;
-import io.github.angry_birds.Sprites.Blocks.Wood;
 
+import javax.swing.plaf.IconUIResource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,10 @@ public class GameScreen implements Screen {
     private Red red;
     private Chuck chuck;
     private Terence terence;
+    private Minion minion;
+    private Foreman foreman;
+    private Corporal corporal;
+
 
     public GameScreen(Core game) {
         camera = new OrthographicCamera();
@@ -53,108 +59,180 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0, -9.8f), true);
         debugRenderer = new Box2DDebugRenderer();
 
+
+
         red = new Red(world, 300, 300);
         chuck = new Chuck(world, 90, 144);
         terence = new Terence(world, 150, 180);
 
-        world.setContactListener(new ContactListener() {
+
+    world.setContactListener(new ContactListener() {
     @Override
     public void beginContact(Contact contact) {
-    Object userDataA = contact.getFixtureA().getBody().getUserData();
-    Object userDataB = contact.getFixtureB().getBody().getUserData();
+        Object userDataA = contact.getFixtureA().getBody().getUserData();
+        Object userDataB = contact.getFixtureB().getBody().getUserData();
 
-    if (userDataA instanceof CurrentBird || userDataB instanceof CurrentBird) {
-        CurrentBird bird = (userDataA instanceof CurrentBird) ? (CurrentBird) userDataA : (CurrentBird) userDataB;
-        Object other = (userDataA instanceof CurrentBird) ? userDataB : userDataA;
+        if (userDataA instanceof CurrentBird || userDataB instanceof CurrentBird) {
+            CurrentBird bird = (userDataA instanceof CurrentBird) ? (CurrentBird) userDataA : (CurrentBird) userDataB;
+            Object other = (userDataA instanceof CurrentBird) ? userDataB : userDataA;
 
-        if (other instanceof Wood) {
-            Wood wood = (Wood) other;
-            if (bird.getBody().getUserData() instanceof Terence) {
-                wood.hit(3);
-            } else {
-                wood.hit(1);
+            if (other instanceof Wood) {
+                Wood wood = (Wood) other;
+                if (bird.getBody().getUserData() instanceof Terence) {
+                    wood.hit(3);
+                } else {
+                    wood.hit(1);
+                }
+            }
+            if (other instanceof Stone) {
+                Stone stone = (Stone) other;
+                if (bird.getBody().getUserData() instanceof Terence) {
+                    stone.hit(3);
+                } else {
+                    stone.hit(1);
+                }
+            }
+            if (other instanceof Ice) {
+                Ice ice = (Ice) other;
+                if (bird.getBody().getUserData() instanceof Terence) {
+                    ice.hit(3);
+                } else {
+                    ice.hit(1);
+                }
+            }
+            if (other instanceof Minion) {
+                Minion minion = (Minion) other;
+                minion.hit(1);
+            }
+            if (other instanceof Corporal) {
+                Corporal corporal = (Corporal) other;
+                if (bird.getBody().getUserData() instanceof Terence) {
+                    corporal.hit(3);
+                } else {
+                    corporal.hit(1);
+                }
+            }
+            if (other instanceof Foreman) {
+                Foreman foreman = (Foreman) other;
+                if (bird.getBody().getUserData() instanceof Terence) {
+                    foreman.hit(3);
+                } else {
+                    foreman.hit(1);
+                }
             }
         }
-        if (other instanceof Stone) {
-            Stone stone = (Stone) other;
-            if (bird.getBody().getUserData() instanceof Terence) {
-                stone.hit(3);
-            } else {
-                stone.hit(1);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        if (woodBlock.getHit() == 2) {
+            woodBlock.markForRemoval();
+        }
+        if (stoneStick.getHit() == 3) {
+            stoneStick.markForRemoval();
+        }
+        if (iceBlock.getHit() == 1) {
+            iceBlock.markForRemoval();
+        }
+        if (minion.getHit() == 1) {
+            minion.markForRemoval();
+        }
+        if (foreman.getHit()==2){
+            foreman.markForRemoval();
+        }
+        if (corporal.getHit()==3){
+            corporal.markForRemoval();
+        }
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold manifold) {
+        if (woodBlock.getHit() > 2) {
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
+                    (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof Wood && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
+                contact.setEnabled(false);
             }
         }
-        if (other instanceof Ice) {
-            Ice ice = (Ice) other;
-            if (bird.getBody().getUserData() instanceof Terence) {
-                ice.hit(3);
-            } else {
-                ice.hit(1);
+        if (stoneStick.getHit() > 3) {
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Stone) ||
+                    (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof Stone && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
+                contact.setEnabled(false);
+            }
+        }
+        if (iceBlock.getHit() > 0) {
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Ice) ||
+                    (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
+                    (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
+                contact.setEnabled(false);
+            }
+        }
+        if (minion.getHit() > 0) {
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Minion) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Minion)) {
+                contact.setEnabled(false);
+            }
+        }
+        if(foreman.getHit()>2){
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Foreman) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Foreman)) {
+                contact.setEnabled(false);
+            }
+        }
+        if(corporal.getHit()>3){
+            if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Corporal) ||
+                    (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Corporal)) {
+                contact.setEnabled(false);
             }
         }
     }
-}
-
-@Override
-public void endContact(Contact contact) {
-    if (woodBlock.getHit() == 2) {
-        woodBlock.markForRemoval();
-    }
-    if (stoneStick.getHit() == 2) {
-        stoneStick.markForRemoval();
-    }
-    if (iceBlock.getHit() == 1) {
-        iceBlock.markForRemoval();
-    }
-}
-
-@Override
-public void preSolve(Contact contact, Manifold manifold) {
-    if (woodBlock.getHit() > 2) {
-        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
-                (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof Wood && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
-            contact.setEnabled(false);
-        }
-    }
-    if (stoneStick.getHit() > 2) {
-        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Stone) ||
-                (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof Stone && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
-            contact.setEnabled(false);
-        }
-    }
-    if (iceBlock.getHit() > 1) {
-        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Ice) ||
-                (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
-                (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
-                (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
-            contact.setEnabled(false);
-        }
-    }
-}
 
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
-    });
-        // Initialize birds
+});
 
+
+
+
+
+
+
+
+
+
+        // Initialize birds
+        //------------------------------------------
+        //--------------------------------------------
         birds = new ArrayList<>();
         birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300)));
         birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300))); //100, 144
         birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        sling = new Sling(world, 250, 144);
-        woodBlock = new Wood(world, 1000, 200);
-        stoneStick = new Stone(world, 700, 600);
-        iceBlock = new Ice(world, 1500, 200);
-
-        // Set the first bird as the current bird
         setCurrentBird(0);
 
-        // Load background texture
+
+
+
+
+        sling = new Sling(world, 250, 144);
+
+
+        woodBlock = new Wood(world, 1000, 200);
+        stoneStick = new Stone(world, 1900, 600);
+        iceBlock = new Ice(world, 1500, 200);
+
+
+        minion = new Minion(world, 500, 200);
+        foreman = new Foreman(world, 700, 200);
+        corporal = new Corporal(world, 800, 200);
+
+
+
         background = new Texture("Menu/Game/background.jpg");
 
         // Create ground body
@@ -287,12 +365,12 @@ public void preSolve(Contact contact, Manifold manifold) {
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         sling.render(batch);
-       // for (CurrentBird bird : birds) {
-       //     ((Renderable) currentBird.getBody().getUserData()).render(batch);
-       // }
         red.render(batch);
         chuck.render(batch);
         terence.render(batch);
+        minion.render(batch);
+        foreman.render(batch);
+        corporal.render(batch);
         currentBird.render(batch);
         woodBlock.render(batch);
         stoneStick.render(batch);
@@ -328,6 +406,9 @@ public void preSolve(Contact contact, Manifold manifold) {
         woodBlock.dispose();
         stoneStick.dispose();
         iceBlock.dispose();
+        minion.dispose();
+        foreman.dispose();
+        corporal.dispose();
         background.dispose();
     }
 }
