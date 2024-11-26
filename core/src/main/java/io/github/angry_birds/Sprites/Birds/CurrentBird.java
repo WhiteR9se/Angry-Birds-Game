@@ -12,6 +12,7 @@ public class CurrentBird {
     public CurrentBird(Body body, Vector2 initialPosition) {
         this.body = body;
         this.initialPosition = initialPosition;
+        body.setUserData(this);
     }
 
     public Body getBody() {

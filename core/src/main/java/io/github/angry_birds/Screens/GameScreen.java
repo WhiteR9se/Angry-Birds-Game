@@ -53,9 +53,45 @@ public class GameScreen implements Screen {
         debugRenderer = new Box2DDebugRenderer();
 
         red = new Red(world, 300, 300);
-        chuck = new Chuck(world, 100, 144);
-        terence = new Terence(world, 200, 180);
+        chuck = new Chuck(world, 90, 144);
+        terence = new Terence(world, 150, 180);
 
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+        (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
+            woodBlock.hit(world);
+}
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+                if(woodBlock.getHit()==2){
+                    woodBlock.markForRemoval();
+
+                }
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold manifold) {
+                if(woodBlock.getHit()>2) {
+                    if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                            (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
+                        contact.setEnabled(false);
+                    }
+                }
+            }
+
+                @Override
+                public void postSolve(Contact contact, ContactImpulse contactImpulse) {
+                    if(woodBlock.getHit()==1) {
+                        //woodBlock.markForRemoval();
+                    }
+                }
+
+
+        });
         // Initialize birds
         birds = new ArrayList<>();
         birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300)));
@@ -75,16 +111,51 @@ public class GameScreen implements Screen {
 
         EdgeShape groundShape = new EdgeShape();
         groundShape.set(new Vector2(-Gdx.graphics.getWidth(), 144), new Vector2(Gdx.graphics.getWidth(), 144));
+
         FixtureDef groundFixtureDef = new FixtureDef();
         groundFixtureDef.shape = groundShape;
         groundFixtureDef.friction = 0.5f;
         groundFixtureDef.restitution = 0.5f;
+
         groundBody.createFixture(groundFixtureDef);
         groundShape.dispose();
+        EdgeShape rightWallShape = new EdgeShape();
+        rightWallShape.set(new Vector2(1920, 1080), new Vector2(1920, 0));
+
+        FixtureDef rightWallFixtureDef = new FixtureDef();
+        rightWallFixtureDef.shape = rightWallShape;
+        rightWallFixtureDef.friction = 0.5f;
+        rightWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(rightWallFixtureDef);
+        rightWallShape.dispose();
+
+        EdgeShape leftWallShape = new EdgeShape();
+        leftWallShape.set(new Vector2(0, 0), new Vector2(0, 1080));
+
+        FixtureDef leftWallFixtureDef = new FixtureDef();
+        leftWallFixtureDef.shape = leftWallShape;
+        leftWallFixtureDef.friction = 0.5f;
+        leftWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(leftWallFixtureDef);
+        leftWallShape.dispose();
+
+        EdgeShape upperWallShape = new EdgeShape();
+        upperWallShape.set(new Vector2(0, 1080), new Vector2(1920, 1080));
+
+        FixtureDef upperWallFixtureDef = new FixtureDef();
+        upperWallFixtureDef.shape = upperWallShape;
+        upperWallFixtureDef.friction = 0.5f;
+        upperWallFixtureDef.restitution = 0.5f;
+
+        groundBody.createFixture(upperWallFixtureDef);
+        upperWallShape.dispose();
 
         // Initialize other game objects
-        sling = new Sling(world, 280, 144);
+        sling = new Sling(world, 250, 144);
         woodBlock = new Wood(world, 1000, 200);
+
 
         // Handle touch input
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -134,7 +205,7 @@ public class GameScreen implements Screen {
                         public void run() {
                             setCurrentBird((birds.indexOf(currentBird) + 1) % birds.size());
                         }
-                    }, 5);
+                    }, 3);
                 }
                 return true;
             }
