@@ -2,9 +2,9 @@ package io.github.angry_birds.Sprites.Blocks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import io.github.angry_birds.Sprites.Birds.CurrentBird;
 
 public class Wood {
     private Body body;
@@ -50,9 +50,12 @@ public class Wood {
             }
     }
 
-    public void hit(World world) {
-        hitCount++;
+    public void hit(int increment) {
+    hitCount += increment;
+    if (hitCount == 2) {
+        markForRemoval();
     }
+}
     public void markForRemoval(){
         markedForRemoval = true;
     }

@@ -55,7 +55,7 @@ public class Terence {
         texture.dispose();
     }
     public void hit(World world) {
-        hitCount++;
+        hitCount+=3;
     }
 
     public int getHit() {

@@ -28,8 +28,11 @@ Menu/Blocks/Stone/stone_rectangle1.png
 Menu/Blocks/Stone/stone_rectangle2.png
 Menu/Blocks/Stone/stone_rectangle3.png
 Menu/Blocks/Stone/stone_stick1.png
+Menu/Blocks/Stone/stone_stick1_vertical.png
 Menu/Blocks/Stone/stone_stick2.png
+Menu/Blocks/Stone/stone_stick2_vertical.png
 Menu/Blocks/Stone/stone_stick3.png
+Menu/Blocks/Stone/stone_stick3_vertical.png
 Menu/Blocks/Wood/wood1.png
 Menu/Blocks/Wood/wood2.png
 Menu/Blocks/Wood/wood_hollow1.png

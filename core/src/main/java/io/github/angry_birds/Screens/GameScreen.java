@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,6 +18,8 @@ import io.github.angry_birds.Sprites.Birds.CurrentBird;
 import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Chuck;
 import io.github.angry_birds.Sprites.Birds.Terence;
+import io.github.angry_birds.Sprites.Blocks.Ice;
+import io.github.angry_birds.Sprites.Blocks.Stone;
 import io.github.angry_birds.Sprites.Sling;
 import io.github.angry_birds.Sprites.Blocks.Wood;
 
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameScreen implements Screen {
-    private Core game;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -40,12 +40,13 @@ public class GameScreen implements Screen {
     private Body groundBody;
     private Sling sling;
     private Wood woodBlock;
+    private Stone stoneStick;
+    private Ice iceBlock;
     private Red red;
     private Chuck chuck;
     private Terence terence;
 
     public GameScreen(Core game) {
-        this.game = game;
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -57,46 +58,98 @@ public class GameScreen implements Screen {
         terence = new Terence(world, 150, 180);
 
         world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
-        (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
-            woodBlock.hit(world);
+    @Override
+    public void beginContact(Contact contact) {
+    Object userDataA = contact.getFixtureA().getBody().getUserData();
+    Object userDataB = contact.getFixtureB().getBody().getUserData();
+
+    if (userDataA instanceof CurrentBird || userDataB instanceof CurrentBird) {
+        CurrentBird bird = (userDataA instanceof CurrentBird) ? (CurrentBird) userDataA : (CurrentBird) userDataB;
+        Object other = (userDataA instanceof CurrentBird) ? userDataB : userDataA;
+
+        if (other instanceof Wood) {
+            Wood wood = (Wood) other;
+            if (bird.getBody().getUserData() instanceof Terence) {
+                wood.hit(3);
+            } else {
+                wood.hit(1);
+            }
+        }
+        if (other instanceof Stone) {
+            Stone stone = (Stone) other;
+            if (bird.getBody().getUserData() instanceof Terence) {
+                stone.hit(3);
+            } else {
+                stone.hit(1);
+            }
+        }
+        if (other instanceof Ice) {
+            Ice ice = (Ice) other;
+            if (bird.getBody().getUserData() instanceof Terence) {
+                ice.hit(3);
+            } else {
+                ice.hit(1);
+            }
+        }
+    }
 }
-            }
 
-            @Override
-            public void endContact(Contact contact) {
-                if(woodBlock.getHit()==2){
-                    woodBlock.markForRemoval();
+@Override
+public void endContact(Contact contact) {
+    if (woodBlock.getHit() == 2) {
+        woodBlock.markForRemoval();
+    }
+    if (stoneStick.getHit() == 2) {
+        stoneStick.markForRemoval();
+    }
+    if (iceBlock.getHit() == 1) {
+        iceBlock.markForRemoval();
+    }
+}
 
-                }
-            }
+@Override
+public void preSolve(Contact contact, Manifold manifold) {
+    if (woodBlock.getHit() > 2) {
+        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
+                (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof Wood && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
+            contact.setEnabled(false);
+        }
+    }
+    if (stoneStick.getHit() > 2) {
+        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Stone) ||
+                (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Stone) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof Stone && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
+            contact.setEnabled(false);
+        }
+    }
+    if (iceBlock.getHit() > 1) {
+        if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Ice) ||
+                (contact.getFixtureA().getBody().getUserData() instanceof Wood && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Wood) ||
+                (contact.getFixtureA().getBody().getUserData() instanceof Stone && contact.getFixtureB().getBody().getUserData() instanceof Ice) ||
+                (contact.getFixtureB().getBody().getUserData() instanceof Ice && contact.getFixtureA().getBody().getUserData() instanceof Stone)) {
+            contact.setEnabled(false);
+        }
+    }
+}
 
-            @Override
-            public void preSolve(Contact contact, Manifold manifold) {
-                if(woodBlock.getHit()>2) {
-                    if ((contact.getFixtureA().getBody().getUserData() instanceof CurrentBird && contact.getFixtureB().getBody().getUserData() instanceof Wood) ||
-                            (contact.getFixtureB().getBody().getUserData() instanceof CurrentBird && contact.getFixtureA().getBody().getUserData() instanceof Wood)) {
-                        contact.setEnabled(false);
-                    }
-                }
-            }
-
-                @Override
-                public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-                    if(woodBlock.getHit()==1) {
-                        //woodBlock.markForRemoval();
-                    }
-                }
-
-
-        });
+    @Override
+    public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
+    });
         // Initialize birds
+
         birds = new ArrayList<>();
         birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300)));
         birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300))); //100, 144
         birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
+        sling = new Sling(world, 250, 144);
+        woodBlock = new Wood(world, 1000, 200);
+        stoneStick = new Stone(world, 700, 600);
+        iceBlock = new Ice(world, 1500, 200);
 
         // Set the first bird as the current bird
         setCurrentBird(0);
@@ -153,8 +206,6 @@ public class GameScreen implements Screen {
         upperWallShape.dispose();
 
         // Initialize other game objects
-        sling = new Sling(world, 250, 144);
-        woodBlock = new Wood(world, 1000, 200);
 
 
         // Handle touch input
@@ -244,6 +295,8 @@ public class GameScreen implements Screen {
         terence.render(batch);
         currentBird.render(batch);
         woodBlock.render(batch);
+        stoneStick.render(batch);
+        iceBlock.render(batch);
         batch.end();
 
         debugRenderer.render(world, camera.combined);
@@ -273,6 +326,8 @@ public class GameScreen implements Screen {
             ((Disposable)bird.getBody().getUserData()).dispose();
         }
         woodBlock.dispose();
+        stoneStick.dispose();
+        iceBlock.dispose();
         background.dispose();
     }
 }
