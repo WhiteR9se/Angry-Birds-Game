@@ -332,7 +332,11 @@ public class GameScreen implements Screen {
                     Timer.schedule(new Timer.Task() {
                         @Override
                         public void run() {
-                            setCurrentBird((birds.indexOf(currentBird) + 1) % birds.size());
+                            birds.remove(currentBird);
+                            if(!birds.isEmpty()){
+                                setCurrentBird(0);
+                            }
+                            else{currentBird= null;}
                         }
                     }, 3);
                 }
@@ -371,7 +375,7 @@ public class GameScreen implements Screen {
         minion.render(batch);
         foreman.render(batch);
         corporal.render(batch);
-        currentBird.render(batch);
+        if (currentBird != null) currentBird.render(batch);
         woodBlock.render(batch);
         stoneStick.render(batch);
         iceBlock.render(batch);
