@@ -5,16 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Red {
+public class Red implements Renderable, Disposable {
     private Body body;
     private BodyDef bodyDef;
     private FixtureDef fixture;
     private Texture texture;
     private TextureRegion textureRegion;
-    private int health;
+    private int hitCount;
 
     public Red(World world, float x, float y) {
-        health = 100;
+        hitCount = 0;
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         fixture = new FixtureDef();
@@ -43,26 +43,25 @@ public class Red {
         circle.dispose();
     }
 
+    public void hit(World world) {
+        hitCount++;
+    }
+
+    public int getHit() {
+        return hitCount;
+    }
+
+    @Override
     public void render(SpriteBatch batch) {
         batch.draw(textureRegion, body.getPosition().x - 25f, body.getPosition().y - 25f, 50, 50);
     }
+
     public Body getBody() {
         return body;
     }
 
+    @Override
     public void dispose() {
         texture.dispose();
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void hit(World world) {
-        world.destroyBody(body);
     }
 }

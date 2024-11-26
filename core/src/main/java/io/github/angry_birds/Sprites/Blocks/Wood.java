@@ -20,7 +20,7 @@ public class Wood {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(40.5f, 40.5f, new Vector2(0.5f, 0.5f), 0); // Set size to 81x81
+        shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -44,9 +44,9 @@ public class Wood {
     public void render(SpriteBatch batch) {
         if (body ==null) {return;}
         if (hitCount == 0) {
-                batch.draw(texture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
+                batch.draw(texture, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
             } else if (hitCount == 1) {
-                batch.draw(damagedTexture, body.getPosition().x - 40.5f, body.getPosition().y - 40.5f, 81f, 81f);
+                batch.draw(damagedTexture, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
             }
     }
 
