@@ -4,13 +4,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import io.github.angry_birds.Sprites.Blocks.Wood;
 
-public class Corporal {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Corporal implements Serializable{
     private Body body;
     private Texture texture;
     private Texture damagedTexture2, damagedTexture;
     private int hitCount;
     public boolean markedForRemoval;
+    public static List<Corporal> corporals = new ArrayList<>();
+
 
     public Corporal(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -19,7 +26,7 @@ public class Corporal {
         body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(11f, 124f, new Vector2(0.5f, 0.5f), 0); // Set size to 22x248
+        shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -27,7 +34,7 @@ public class Corporal {
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.9f;
         MassData massData = new MassData();
-        massData.mass = 2;
+        massData.mass = 5;
         body.setMassData(massData);
         body.setUserData(this);
         body.createFixture(fixtureDef);
@@ -39,21 +46,22 @@ public class Corporal {
         hitCount = 0;
         body.setFixedRotation(true);
         markedForRemoval = false;
+        corporals.add(this);
     }
 
     public void render(SpriteBatch batch) {
         if (body == null) { return; }
         if (hitCount == 0) {
-            batch.draw(texture, body.getPosition().x - 11f, body.getPosition().y - 124f, 22f, 248f);
+            batch.draw(texture, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
         } else if (hitCount == 1) {
-            batch.draw(damagedTexture, body.getPosition().x - 11f, body.getPosition().y - 124f, 22f, 248f);
+            batch.draw(damagedTexture, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
         } else if (hitCount == 2) {
-            batch.draw(damagedTexture2, body.getPosition().x - 11f, body.getPosition().y - 124f, 22f, 248f);
+            batch.draw(damagedTexture2, body.getPosition().x - 30f, body.getPosition().y - 30f, 60f, 60f);
         }
     }
 
-    public void hit(int increment) {
-        hitCount += increment;
+    public void hit() {
+        hitCount ++;
 
     }
 

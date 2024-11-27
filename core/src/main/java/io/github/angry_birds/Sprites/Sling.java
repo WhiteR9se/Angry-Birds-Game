@@ -12,7 +12,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import io.github.angry_birds.Core;
 
-public class Sling extends Sprite {
+import java.io.Serializable;
+
+public class Sling extends Sprite implements Serializable{
     private final Body slingBody;
     private final Texture slingTexture;
 

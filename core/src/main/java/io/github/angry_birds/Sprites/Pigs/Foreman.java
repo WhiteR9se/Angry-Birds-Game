@@ -5,13 +5,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import io.github.angry_birds.Sprites.Birds.CurrentBird;
+import io.github.angry_birds.Sprites.Blocks.Wood;
 
-public class Foreman {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Foreman implements Serializable {
     private Body body;
     private Texture texture;
     private Texture damagedTexture;
     private int hitCount;
     public boolean markedForRemoval;
+    public static List<Foreman> foremans = new ArrayList<>();
+
 
     public Foreman(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -26,9 +33,9 @@ public class Foreman {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0.9f;
+        fixtureDef.restitution = 0.5f;
         MassData massData = new MassData();
-        massData.mass = 2;
+        massData.mass = 3;
         body.setMassData(massData);
         body.setUserData(this);
         body.createFixture(fixtureDef);
@@ -39,6 +46,7 @@ public class Foreman {
         hitCount = 0;
         body.setFixedRotation(true);
         markedForRemoval = false;
+        foremans.add(this);
     }
 
     public void render(SpriteBatch batch) {
@@ -50,8 +58,8 @@ public class Foreman {
         }
     }
 
-    public void hit(int increment) {
-        hitCount += increment;
+    public void hit() {
+        hitCount ++;
 
     }
     public void markForRemoval(){

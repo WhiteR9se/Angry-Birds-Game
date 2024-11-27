@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Chuck implements Renderable, Disposable {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Chuck implements Renderable, Disposable , Serializable {
     private Body body;
     private BodyDef bodyDef;
     private FixtureDef fixture;

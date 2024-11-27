@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
+import java.io.Serializable;
 
-public class Terence {
+public class Terence implements Serializable {
     private Body body;
     private BodyDef bodyDef;
     private FixtureDef fixture;
@@ -33,7 +34,7 @@ public class Terence {
         fixture.density = 1f;
         fixture.friction = 0.5f;
         MassData massData = new MassData();
-        massData.mass = 50f;
+        massData.mass = 150f;
         fixture.restitution = 0.25f;
         body.setAngularDamping(5f);
         body.createFixture(fixture);
@@ -55,7 +56,7 @@ public class Terence {
         texture.dispose();
     }
     public void hit(World world) {
-        hitCount+=3;
+        hitCount++;
     }
 
     public int getHit() {

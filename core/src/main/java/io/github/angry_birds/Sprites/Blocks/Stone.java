@@ -4,13 +4,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 
-public class Stone {
+public class Stone implements Serializable {
     private Body body;
     private Texture texture;
     private Texture damagedTexture2, damagedTexture;
     private int hitCount;
     public boolean markedForRemoval;
+    public static List<Stone> stones = new ArrayList<>();
+
 
     public Stone(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -27,7 +32,7 @@ public class Stone {
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.1f;
         MassData massData = new MassData();
-        massData.mass = 2;
+        massData.mass = 5;
         body.setMassData(massData);
         body.setUserData(this);
         body.createFixture(fixtureDef);
@@ -39,6 +44,7 @@ public class Stone {
         hitCount = 0;
         body.setFixedRotation(true);
         markedForRemoval = false;
+        stones.add(this);
     }
 
     public void render(SpriteBatch batch) {
@@ -52,8 +58,8 @@ public class Stone {
         }
     }
 
-    public void hit(int increment) {
-        hitCount += increment;
+    public void hit() {
+        hitCount ++;
     }
 
     public void markForRemoval() {

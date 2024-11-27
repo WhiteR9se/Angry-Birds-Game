@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
+import java.io.Serializable;
 
-public class Red implements Renderable, Disposable {
+public class Red implements Renderable, Disposable, Serializable {
     private Body body;
     private BodyDef bodyDef;
     private FixtureDef fixture;

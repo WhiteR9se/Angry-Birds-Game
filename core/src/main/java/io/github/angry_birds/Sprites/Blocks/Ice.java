@@ -5,11 +5,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Ice {
+import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Ice implements Serializable {
     private Body body;
     private Texture texture;
     private int hitCount;
     public boolean markedForRemoval;
+    public static List<Ice> ices = new ArrayList<>();
+
 
     public Ice(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -26,7 +32,7 @@ public class Ice {
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.1f;
         MassData massData = new MassData();
-        massData.mass = 2;
+        massData.mass = 1;
         body.setMassData(massData);
         body.setUserData(this);
         body.createFixture(fixtureDef);
@@ -36,6 +42,7 @@ public class Ice {
         hitCount = 0;
         body.setFixedRotation(true);
         markedForRemoval = false;
+        ices.add(this);
     }
 
     public void render(SpriteBatch batch) {
@@ -45,8 +52,8 @@ public class Ice {
         }
     }
 
-    public void hit(int increment) {
-        hitCount += increment;
+    public void hit() {
+        hitCount ++;
     }
     public void markForRemoval(){
         markedForRemoval = true;

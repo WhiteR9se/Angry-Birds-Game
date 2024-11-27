@@ -4,12 +4,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import io.github.angry_birds.Sprites.Blocks.Wood;
 
-public class Minion {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Minion implements Serializable {
     private Body body;
     private Texture texture;
     private int hitCount;
     public boolean markedForRemoval;
+    public static List<Minion> minions = new ArrayList<>();
+
 
     public Minion(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -24,12 +31,13 @@ public class Minion {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0.9f;
+        fixtureDef.restitution = 0.5f;
         MassData massData = new MassData();
         massData.mass = 2;
         body.setMassData(massData);
         body.setUserData(this);
         body.createFixture(fixtureDef);
+        minions.add(this);
         shape.dispose();
 
         texture = new Texture("Menu/Pigs/Minion_pig.png");
@@ -45,8 +53,8 @@ public class Minion {
         }
     }
 
-    public void hit(int increment) {
-        hitCount += increment;
+    public void hit() {
+        hitCount ++;
     }
 
     public void markForRemoval() {
