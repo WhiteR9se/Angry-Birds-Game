@@ -391,9 +391,11 @@ public class Level3 implements Screen {
                             if(!birds.isEmpty()){
                                 setCurrentBird(0);
                             }
-                            else{currentBird= null;}
+                            else{currentBird= null;
+                                isLose = true;
+                            }
                         }
-                    }, 4);
+                    }, 5);
                 }
                 return true;
             }
@@ -411,7 +413,11 @@ public class Level3 implements Screen {
             game.setScreen(new WinScreen(game, Level2.class, Level1.class));
         }
     }
-
+    public void toggleLoseScreen(Core game){
+        if(isLose){
+            game.setScreen(new LoseScreen(game, Level1.class));
+        }
+    }
 
     private void saveGameState(){
         GameState.saveState(gameState, currentLevel);
@@ -477,6 +483,7 @@ public class Level3 implements Screen {
         if (currentBird != null) currentBird.render(batch);
         L3.render(batch);
         toggleWinScreen(game);
+        toggleLoseScreen(game);
         batch.end();
 
         debugRenderer.render(world, camera.combined);

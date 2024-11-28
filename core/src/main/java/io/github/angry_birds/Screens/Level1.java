@@ -391,9 +391,12 @@ public class Level1 implements Screen {
                             if(!birds.isEmpty()){
                                 setCurrentBird(0);
                             }
-                            else{currentBird= null;}
+                            else{
+                                currentBird= null;
+                                isLose = true;
+                            }
                         }
-                    }, 4);
+                    }, 5);
                 }
                 return true;
             }
@@ -403,6 +406,11 @@ public class Level1 implements Screen {
     public void makeWinYes(){
         if(L1.minion1.markedForRemoval && L1.minion2.markedForRemoval && L1.minion3.markedForRemoval){
             isWin = true;
+        }
+    }
+    public void toggleLoseScreen(Core game){
+        if(isLose){
+            game.setScreen(new LoseScreen(game, Level1.class));
         }
     }
 
@@ -480,6 +488,7 @@ public class Level1 implements Screen {
         if (currentBird != null){ currentBird.render(batch); }
         L1.render(batch);
        toggleWinScreen(game);
+       toggleLoseScreen(game);
 
 
         batch.end();
