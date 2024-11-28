@@ -11,37 +11,41 @@ import io.github.angry_birds.Sprites.Pigs.*;
 import io.github.angry_birds.Core;
 
 public class level3Structure {
-    private Wood wood1, wood2, wood3;
-    private Stone stone1, stone2, stone3;
+    private Wood wood1, wood2;
+    private Stone stone1, stone2;
     private Ice ice1, ice2, ice3, ice4;
-    private Minion minion1, minion2, minion3;
-    private Foreman foreman1;
-    private Corporal corporal1;
+    private Minion minion1;
+    private Foreman foreman1, foreman2;
+    private Corporal corporal1, corporal2;
     public level3Structure(World world) {
-        stone1 = new Stone(world,1800, 144);
-        wood1 = new Wood(world, 980, 144);
-        wood2 = new Wood(world, 860, 144);
-        ice1 = new Ice(world, 800, 144);
-        ice2 = new Ice(world, 800, 144+60);
-        corporal1 = new Corporal(world,920, 144);
-        foreman1 = new Foreman(world, 980, 144+60);
-        minion1 = new Minion(world, 860,144+60);
+        stone1 = new Stone(world,1200, 144);
+        stone2 = new Stone(world, 1360, 144);
+        wood1 = new Wood(world, 1460, 144);
+        wood2 = new Wood(world, 1460, 144+60);
+        ice1 = new Ice(world, 1550, 144);
+        ice2 = new Ice(world, 1550, 144+60);
+        ice3 = new Ice(world, 1550, 144+120);
+        ice4 = new Ice(world, 1550, 144+180);
+        corporal1 = new Corporal(world, 1460, 144+120);
+        foreman1 = new Foreman(world, 1700, 144);
+        corporal2 = new Corporal(world, 1280, 144);
+        minion1 = new Minion(world, 1400,144);
     }
     public void render(SpriteBatch batch){
         wood1.render(batch); wood2.render(batch);
-        stone1.render(batch);
-        ice1.render(batch); ice2.render(batch);
+        stone1.render(batch); stone2.render(batch);
+        ice1.render(batch); ice2.render(batch); ice3.render(batch); ice4.render(batch);
         minion1.render(batch);
         foreman1.render(batch);
-        corporal1.render(batch);
+        corporal1.render(batch); corporal2.render(batch);
     }
     public void dispose() {
         // Dispose of all textures
         wood1.dispose(); wood2.dispose();
-        ice1.dispose(); ice2.dispose();
-        stone1.dispose();
+        ice1.dispose(); ice2.dispose(); ice3.dispose(); ice4.dispose();
+        stone1.dispose(); stone2.dispose();
         minion1.dispose();
         foreman1.dispose();
-        corporal1.dispose();
+        corporal1.dispose(); corporal2.dispose();
     }
 }

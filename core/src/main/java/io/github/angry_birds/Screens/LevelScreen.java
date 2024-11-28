@@ -56,7 +56,7 @@ public class LevelScreen implements Screen {
                 if (backtoHome.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new HomeScreen(game));
                 } else if (level1.getBoundingRectangle().contains(x, y)) {
-                    game.setScreen(new GameScreen(game));
+                    game.setScreen(new Level1(game));
                 } else if (level2.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new Level2(game));
                 } else if (level3.getBoundingRectangle().contains(x, y)) {

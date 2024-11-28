@@ -26,9 +26,8 @@ public class Foreman implements Serializable {
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
-
+        CircleShape shape = new CircleShape();
+        shape.setRadius(30f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;

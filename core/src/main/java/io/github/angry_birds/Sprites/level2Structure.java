@@ -12,32 +12,33 @@ import io.github.angry_birds.Core;
 
 public class level2Structure {
     private Wood wood1, wood2, wood3;
-    private Stone stone1, stone2, stone3;
-    private Ice ice1, ice2, ice3, ice4;
-    private Minion minion1, minion2, minion3;
-    private Foreman foreman1;
+    private Stone stone1;
+    private Ice ice1, ice2, ice3;
+    private Minion minion1;
+    private Foreman foreman1, foreman2;
     public level2Structure(World world) {
-        stone1 = new Stone(world,1000, 144);
-        stone2 = new Stone(world, 1022, 144);
-        stone3 = new Stone(world, 1044, 144);
-        wood1 = new Wood(world, 940, 144);
-        ice1 = new Ice(world, 860, 144);
-        foreman1 = new Foreman(world, 1022, 144+248);
-        minion1 = new Minion(world, 940,144+240);
+        stone1 = new Stone(world,1260, 144);
+        wood1 = new Wood(world, 1200, 144);
+        foreman1 = new Foreman(world, 1341, 144);
+        ice1 = new Ice(world,1440, 144);
+        ice2 = new Ice(world, 1440, 144+60);
+        ice3 = new Ice(world, 1440, 144+120);
+        minion1 = new Minion(world, 1200,144+240);
+        foreman2 = new Foreman(world, 1600, 144);
     }
     public void render(SpriteBatch batch){
         wood1.render(batch);
-        stone1.render(batch);stone2.render(batch);stone3.render(batch);
-        ice1.render(batch);
+        stone1.render(batch);
+        ice1.render(batch); ice2.render(batch); ice3.render(batch);
         minion1.render(batch);
-        foreman1.render(batch);
+        foreman1.render(batch); foreman2.render(batch);
     }
     public void dispose() {
         // Dispose of all textures
         wood1.dispose();
-        ice1.dispose();
-        stone1.dispose();stone2.dispose();stone3.dispose();
+        ice1.dispose(); ice2.dispose(); ice3.dispose();
+        stone1.dispose();
         minion1.dispose();
-        foreman1.dispose();
+        foreman1.dispose(); foreman2.dispose();
     }
 }

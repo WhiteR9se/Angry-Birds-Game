@@ -1,19 +1,13 @@
-/*
+
 package io.github.angry_birds.Physics;
 
-import com.badlogic.gdx.Game;
-import io.github.angry_birds.Screens.GameSettingScreen;
 import io.github.angry_birds.Sprites.Birds.Chuck;
 import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Terence;
 import io.github.angry_birds.Sprites.Pigs.Minion;
 import io.github.angry_birds.Sprites.Sling;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-import static io.github.angry_birds.Physics.GameState.game;
+import java.io.*;
 
 public class GameState implements Serializable {
     private Red red;
@@ -21,26 +15,56 @@ public class GameState implements Serializable {
     private Terence terence;
     private Sling sling;
     private Minion minion;
-    public static Game game;
     // Add other game objects as needed
 
-    // Constructor and getters/setters
-}
+    public GameState(Red red, Chuck chuck, Terence terence, Sling sling, Minion minion) {
+        this.red = red;
+        this.chuck = chuck;
+        this.terence = terence;
+        this.sling = sling;
+        this.minion = minion;
+    }
 
-public class GameScreen {
-    private GameState gameState;
+    public Red getRed() {
+        return red;
+    }
 
-    private void saveGameState() {
-        try (FileOutputStream fileOut = new FileOutputStream("gameState.ser");
+    public Chuck getChuck() {
+        return chuck;
+    }
+
+    public Terence getTerence() {
+        return terence;
+    }
+
+    public Sling getSling() {
+        return sling;
+    }
+
+    public Minion getMinion() {
+        return minion;
+    }
+
+    // Add getters for other game objects as needed
+
+    public static void saveState(GameState gameState, int level) {
+        String filePath = "gameStatelvl" + level + ".ser";
+        try (FileOutputStream fileOut = new FileOutputStream(filePath);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(gameState);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void toggleGameSettingScreen() {
-        saveGameState();
-        game.setScreen(new GameSettingScreen(game, Level1.class));
+    public static GameState loadState(int level) {
+        String filePath = "gameStatelvl" + level + ".ser";
+        try (FileInputStream fileIn = new FileInputStream(filePath);
+             ObjectInputStream in = new ObjectInputStream(fileIn)) {
+            return (GameState) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-}*/
+}

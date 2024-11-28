@@ -62,9 +62,27 @@ public class GameSettingScreen implements Screen {
                     toggleSound();
                 } else if (quitToHomeButton.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new HomeScreen(game));
+                    if (currentLevel == Level1.class) {
+                        Level1.destroyedBodies.clear();
+                    }
+                    else if (currentLevel == Level2.class) {
+                        Level2.destroyedBodies.clear();
+                    }
+                    else if (currentLevel == Level3.class) {
+                        Level3 .destroyedBodies.clear();
+                    }
                 } else if (restartButton.getBoundingRectangle().contains(x, y)) {
                     try {
                         game.setScreen(currentLevel.getConstructor(Core.class).newInstance(game));
+                        if (currentLevel == Level1.class) {
+                            Level1.destroyedBodies.clear();
+                        }
+                        else if (currentLevel == Level2.class) {
+                            Level2.destroyedBodies.clear();
+                        }
+                        else if (currentLevel == Level3.class) {
+                            Level3 .destroyedBodies.clear();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
