@@ -33,6 +33,7 @@ import java.util.List;
 public class Level1 implements Screen {
     private final Sprite gameSetting;
     private final Texture gameSettingHover;
+    private final Core game;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -54,14 +55,16 @@ public class Level1 implements Screen {
     private Minion minion;
     private Foreman foreman;
     private Corporal corporal;
-    level1Structure L1;
+    public level1Structure L1;
     private boolean isGameSettingScreenVisible;
     public static ArrayList<Body> destroyedBodies = new ArrayList<>() ;
     private GameState gameState;
     private int currentLevel;
+    private boolean isWin, isLose = false;
 
 
     public Level1(Core game) {
+        this.game = game;
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -143,7 +146,7 @@ public class Level1 implements Screen {
             }
         }
         for(Minion minion : Minion.minions){
-            if(minion.getHit()>1){
+            if(minion.getHit()>=1){
                 minion.markForRemoval();
                 destroyedBodies.add(minion.getBody());
 //                timeDelay.add(0.2f);
@@ -397,6 +400,13 @@ public class Level1 implements Screen {
         });
     }
 
+    public void makeWinYes(){
+        if(L1.minion1.markedForRemoval && L1.minion2.markedForRemoval && L1.minion3.markedForRemoval){
+            isWin = true;
+        }
+    }
+
+    //
     private void saveGameState(){
         GameState.saveState(gameState, currentLevel);
     }
@@ -410,6 +420,15 @@ public class Level1 implements Screen {
         minion = gameState.getMinion();
         // Set other game objects as needed
     }
+
+
+    private void toggleWinScreen(Core game){
+        makeWinYes();
+        if(isWin){
+            game.setScreen(new WinScreen(game, Level2.class, Level1.class));
+        }
+    }
+
 
     private void toggleGameSettingScreen(Core game) {
         if (isGameSettingScreenVisible) {
@@ -458,8 +477,11 @@ public class Level1 implements Screen {
         red.render(batch);
         chuck.render(batch);
         terence.render(batch);
-        if (currentBird != null) currentBird.render(batch);
+        if (currentBird != null){ currentBird.render(batch); }
         L1.render(batch);
+       toggleWinScreen(game);
+
+
         batch.end();
 
             debugRenderer.render(world, camera.combined);

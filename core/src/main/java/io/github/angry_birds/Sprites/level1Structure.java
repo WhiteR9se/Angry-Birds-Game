@@ -13,7 +13,7 @@ import io.github.angry_birds.Core;
 public class level1Structure {
     private Wood wood1, wood2, wood3, wood4;
     private Ice ice1, ice2;
-    private Minion minion1, minion2, minion3;
+    public  Minion minion1, minion2, minion3;
     public level1Structure(World world) {
         wood1 = new Wood(world, 1200, 144);
         wood2 = new Wood(world, 1200, 144+60);

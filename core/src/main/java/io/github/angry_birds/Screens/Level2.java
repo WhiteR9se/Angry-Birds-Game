@@ -54,14 +54,17 @@ public class Level2 implements Screen {
     private Minion minion;
     private Foreman foreman;
     private Corporal corporal;
-    level2Structure L2;
+    public level2Structure L2;
     private boolean isGameSettingScreenVisible;
     public static ArrayList<Body> destroyedBodies = new ArrayList<>() ;
     private GameState gameState;
     private int currentLevel;
+    private boolean isWin, isLose = false;
+    private Core game;
 
 
     public Level2(Core game) {
+        this.game = game;
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -397,6 +400,18 @@ public class Level2 implements Screen {
         });
     }
 
+    public void makeWinYes(){
+        if(L2.foreman1.markedForRemoval && L2.foreman2.markedForRemoval && L2.minion1.markedForRemoval){
+            isWin = true;
+        }
+    }
+
+    private void toggleWinScreen(Core game){
+        makeWinYes();
+        if(isWin){
+            game.setScreen(new WinScreen(game, Level2.class, Level1.class));
+        }
+    }
     private void saveGameState(){
         GameState.saveState(gameState, currentLevel);
     }
@@ -460,6 +475,7 @@ public class Level2 implements Screen {
         terence.render(batch);
         if (currentBird != null) currentBird.render(batch);
         L2.render(batch);
+        toggleWinScreen(game);
         batch.end();
 
         debugRenderer.render(world, camera.combined);

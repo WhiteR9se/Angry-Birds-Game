@@ -59,9 +59,12 @@ public class Level3 implements Screen {
     public static ArrayList<Body> destroyedBodies = new ArrayList<>() ;
     private GameState gameState;
     private int currentLevel;
+    private boolean isWin, isLose = false;
+    private Core game;
 
 
     public Level3(Core game) {
+        this.game =game;
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
@@ -79,7 +82,7 @@ public class Level3 implements Screen {
 
         isGameSettingScreenVisible = false;
         gameState = new GameState(red, chuck, terence, sling, minion);
-        currentLevel = 1;
+        currentLevel = 3;
 
         world.setContactListener(new ContactListener() {
             @Override
@@ -397,6 +400,19 @@ public class Level3 implements Screen {
         });
     }
 
+    public void makeWinYes(){
+        if(L3.foreman1.markedForRemoval && L3.foreman2.markedForRemoval && L3.minion1.markedForRemoval && L3.corporal1.markedForRemoval && L3.corporal2.markedForRemoval){
+            isWin = true;
+        }
+    }
+    private void toggleWinScreen(Core game){
+        makeWinYes();
+        if(isWin){
+            game.setScreen(new WinScreen(game, Level2.class, Level1.class));
+        }
+    }
+
+
     private void saveGameState(){
         GameState.saveState(gameState, currentLevel);
     }
@@ -460,6 +476,7 @@ public class Level3 implements Screen {
         terence.render(batch);
         if (currentBird != null) currentBird.render(batch);
         L3.render(batch);
+        toggleWinScreen(game);
         batch.end();
 
         debugRenderer.render(world, camera.combined);

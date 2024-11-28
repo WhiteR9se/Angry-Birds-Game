@@ -14,9 +14,9 @@ public class level3Structure {
     private Wood wood1, wood2;
     private Stone stone1, stone2;
     private Ice ice1, ice2, ice3, ice4;
-    private Minion minion1;
-    private Foreman foreman1, foreman2;
-    private Corporal corporal1, corporal2;
+    public  Minion minion1;
+    public Foreman foreman1, foreman2;
+    public Corporal corporal1, corporal2;
     public level3Structure(World world) {
         stone1 = new Stone(world,1200, 144);
         stone2 = new Stone(world, 1360, 144);
