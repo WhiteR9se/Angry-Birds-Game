@@ -391,8 +391,14 @@ public class Level3 implements Screen {
                             if(!birds.isEmpty()){
                                 setCurrentBird(0);
                             }
-                            else{currentBird= null;
-                                isLose = true;
+                            else{
+                                currentBird= null;
+                                Timer.schedule(new Timer.Task(){
+                                    @Override
+                                    public void run(){
+                                        isLose = true;
+                                    }
+                                }, 5);
                             }
                         }
                     }, 5);
@@ -415,7 +421,7 @@ public class Level3 implements Screen {
     }
     public void toggleLoseScreen(Core game){
         if(isLose){
-            game.setScreen(new LoseScreen(game, Level1.class));
+            game.setScreen(new LoseScreen(game, Level3.class));
         }
     }
 

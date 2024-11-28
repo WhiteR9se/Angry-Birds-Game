@@ -393,10 +393,17 @@ public class Level1 implements Screen {
                             }
                             else{
                                 currentBird= null;
-                                isLose = true;
+                                Timer.schedule(new Timer.Task(){
+                                    @Override
+                                    public void run(){
+                                        isLose = true;
+                                    }
+                                }, 5);
+
                             }
                         }
                     }, 5);
+                    
                 }
                 return true;
             }
