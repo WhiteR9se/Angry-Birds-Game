@@ -36,7 +36,6 @@
 │               └───io
 │                   └───github
 │                       └───angry_birds
-│                           ├───Physics
 │                           ├───Screens
 │                           └───Sprites
 │                               ├───Birds
