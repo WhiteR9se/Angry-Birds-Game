@@ -554,7 +554,7 @@ public class Level1 implements Screen {
         }
         batch.end();
 
-            debugRenderer.render(world, camera.combined);
+            //debugRenderer.render(world, camera.combined);
     }
 
     @Override

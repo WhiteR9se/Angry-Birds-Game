@@ -259,7 +259,8 @@ public class Level3 implements Screen {
         birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
         birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
         birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
-
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence"));
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence"));
 
         setCurrentBird(0);
 
@@ -407,7 +408,7 @@ public class Level3 implements Screen {
     }
 
     public void makeWinYes(){
-        if(/*L3.foreman1.markedForRemoval && L3.minion1.markedForRemoval && L3.corporal1.markedForRemoval &&*/ L3.corporal2.markedForRemoval){
+        if(L3.foreman1.markedForRemoval && L3.minion1.markedForRemoval && L3.corporal1.markedForRemoval && L3.corporal2.markedForRemoval){
             isWin = true;
         }
     }
@@ -490,7 +491,7 @@ public class Level3 implements Screen {
         toggleLoseScreen(game);
         batch.end();
 
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
     }
 
     @Override

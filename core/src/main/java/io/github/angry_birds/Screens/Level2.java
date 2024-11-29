@@ -489,7 +489,7 @@ public class Level2 implements Screen {
         toggleLoseScreen(game);
         batch.end();
 
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
     }
 
     @Override
