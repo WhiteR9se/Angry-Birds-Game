@@ -3,6 +3,7 @@ package io.github.angry_birds.Sprites.Birds;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import java.io.Serializable;
 
@@ -60,7 +61,9 @@ public class Red implements Renderable, Disposable, Serializable {
     public Body getBody() {
         return body;
     }
-
+    public Vector2 getXY(){
+        return new Vector2(body.getPosition().x, body.getPosition().y);
+    }
     @Override
     public void dispose() {
         texture.dispose();

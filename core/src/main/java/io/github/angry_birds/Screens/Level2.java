@@ -16,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Timer;
 import io.github.angry_birds.Core;
-import io.github.angry_birds.Physics.GameState;
 import io.github.angry_birds.Sprites.Birds.CurrentBird;
 import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Chuck;
@@ -57,7 +56,6 @@ public class Level2 implements Screen {
     public level2Structure L2;
     private boolean isGameSettingScreenVisible;
     public static ArrayList<Body> destroyedBodies = new ArrayList<>() ;
-    private GameState gameState;
     private int currentLevel;
     private boolean isWin, isLose = false;
     private Core game;
@@ -81,7 +79,7 @@ public class Level2 implements Screen {
         terence = new Terence(world, 150, 180);
 
         isGameSettingScreenVisible = false;
-        gameState = new GameState(red, chuck, terence, sling, minion);
+//        gameState = new GameState(red, chuck, terence, sling, minion, Level2.class);
         currentLevel = 2;
 
         world.setContactListener(new ContactListener() {
@@ -146,21 +144,21 @@ public class Level2 implements Screen {
                     }
                 }
                 for(Minion minion : Minion.minions){
-                    if(minion.getHit()>1){
+                    if(minion.getHit()>0){
                         minion.markForRemoval();
                         destroyedBodies.add(minion.getBody());
 //                timeDelay.add(0.2f);
                     }
                 }
                 for(Foreman foreman : Foreman.foremans){
-                    if(foreman.getHit()>2){
+                    if(foreman.getHit()>1){
                         foreman.markForRemoval();
                         destroyedBodies.add(foreman.getBody());
 //                timeDelay.add(0.2f);
                     }
                 }
                 for(Corporal corporal : Corporal.corporals) {
-                    if (corporal.getHit() > 3) {
+                    if (corporal.getHit() > 2) {
                         corporal.markForRemoval();
                         destroyedBodies.add(corporal.getBody());
 //                timeDelay.add(0.2f);
@@ -255,12 +253,12 @@ public class Level2 implements Screen {
         //------------------------------------------
         //--------------------------------------------
         birds = new ArrayList<>();
-        birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300)));
-        birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300))); //100, 144
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
+        birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300),"red"));
+        birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300),"chuck")); //100, 144
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300),"terence")); //200, 180
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300),"terence")); //200, 180
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
 
 
         setCurrentBird(0);
@@ -421,22 +419,22 @@ public class Level2 implements Screen {
     private void toggleWinScreen(Core game){
         makeWinYes();
         if(isWin){
-            game.setScreen(new WinScreen(game, Level2.class, Level1.class));
+            game.setScreen(new WinScreen(game, Level3.class, Level2.class));
         }
     }
-    private void saveGameState(){
+    /*private void saveGameState(){
         GameState.saveState(gameState, currentLevel);
     }
     private void loadGameState() {
         gameState = GameState.loadState(currentLevel);
         // Set the game objects from the loaded game state
-        red = gameState.getRed();
-        chuck = gameState.getChuck();
-        terence = gameState.getTerence();
-        sling = gameState.getSling();
-        minion = gameState.getMinion();
+        gameState.getRedBody().applyToBody(red.getBody());
+        gameState.getChuckBody().applyToBody(chuck.getBody());
+        gameState.getTerenceBody().applyToBody(terence.getBody());
+        gameState.getSlingBody().applyToBody(sling.getBody());
+        gameState.getMinionBody().applyToBody(minion.getBody());
         // Set other game objects as needed
-    }
+    }*/
 
     private void toggleGameSettingScreen(Core game) {
         if (isGameSettingScreenVisible) {

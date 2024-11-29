@@ -15,15 +15,15 @@ public class level1Structure {
     private Ice ice1, ice2;
     public  Minion minion1, minion2, minion3;
     public level1Structure(World world) {
-        wood1 = new Wood(world, 1200, 144);
-        wood2 = new Wood(world, 1200, 144+60);
-        wood3 = new Wood(world,1200, 144+120);
-        wood4 = new Wood(world, 1200, 144+180);
-        ice1 = new Ice(world, 1460, 144);
-        ice2 = new Ice(world, 1460, 144+60);
-        minion2 = new Minion(world, 1200, 144+240);
-        minion1 = new Minion(world, 1000,144);
-        minion3 = new Minion(world, 1460, 144+120);
+        wood1 = new Wood(world, 1200, 144,"wood1");
+        wood2 = new Wood(world, 1200, 144+60, "wood2");
+        wood3 = new Wood(world,1200, 144+120, "wood3");
+        wood4 = new Wood(world, 1200, 144+180, "wood4");
+        ice1 = new Ice(world, 1460, 144, "ice1");
+        ice2 = new Ice(world, 1460, 144+60, "ice2");
+        minion2 = new Minion(world, 1200, 144+240, "minion2");
+        minion1 = new Minion(world, 1000,144, "minion1");
+        minion3 = new Minion(world, 1460, 144+120, "minion3");
     }
     public void render(SpriteBatch batch){
         wood1.render(batch);

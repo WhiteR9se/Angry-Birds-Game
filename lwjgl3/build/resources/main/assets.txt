@@ -97,6 +97,8 @@ Menu/Pigs/Minion_pig_hurt.png
 Menu/Pigs/Minion_pig_hurt2.png
 Menu/PostGame/backToLevel.png
 Menu/PostGame/backToLevelHover.png
+Menu/PostGame/congratulations.png
+Menu/PostGame/congratulations_hover.png
 Menu/PostGame/loseScreen.png
 Menu/PostGame/next.png
 Menu/PostGame/nextHover.png

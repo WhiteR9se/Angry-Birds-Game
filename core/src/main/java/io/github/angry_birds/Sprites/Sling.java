@@ -50,4 +50,8 @@ public class Sling extends Sprite implements Serializable{
     public void dispose() {
         slingTexture.dispose();
     }
+
+    public Body getBody() {
+        return slingBody;
+    }
 }

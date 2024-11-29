@@ -1,3 +1,4 @@
+// GameSettingScreen.java
 package io.github.angry_birds.Screens;
 
 import com.badlogic.gdx.Gdx;
@@ -62,33 +63,37 @@ public class GameSettingScreen implements Screen {
                     toggleSound();
                 } else if (quitToHomeButton.getBoundingRectangle().contains(x, y)) {
                     game.setScreen(new HomeScreen(game));
-                    if (currentLevel == Level1.class) {
-                        Level1.destroyedBodies.clear();
-                    }
-                    else if (currentLevel == Level2.class) {
-                        Level2.destroyedBodies.clear();
-                    }
-                    else if (currentLevel == Level3.class) {
-                        Level3 .destroyedBodies.clear();
-                    }
                 } else if (restartButton.getBoundingRectangle().contains(x, y)) {
                     try {
-                        game.setScreen(currentLevel.getConstructor(Core.class).newInstance(game));
                         if (currentLevel == Level1.class) {
-                            Level1.destroyedBodies.clear();
+                            Level1 l1 = new Level1(game);
+                            l1.gameObjects.clear();
+                            l1.destroyedBodies.clear();
+                            game.setScreen(l1);
                         }
                         else if (currentLevel == Level2.class) {
-                            Level2.destroyedBodies.clear();
+                            Level2 l2 = new Level2(game);
+                            l2.destroyedBodies.clear();
+                            game.setScreen(l2);
                         }
                         else if (currentLevel == Level3.class) {
-                            Level3 .destroyedBodies.clear();
+                            Level3 l3 = new Level3(game);
+                            l3.destroyedBodies.clear();
+                            game.setScreen(l3);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else if (resumeButton.getBoundingRectangle().contains(x, y)) {
                     try {
-                        game.setScreen(currentLevel.getConstructor(Core.class).newInstance(game));
+                        if(currentLevel == Level1.class) {
+                            Level1 l1 = new Level1(game);
+                            game.setScreen(l1);
+                        } else if (currentLevel == Level2.class) {
+                            game.setScreen(new Level2(game));
+                        } else if (currentLevel == Level3.class) {
+                            game.setScreen(new Level3(game));
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

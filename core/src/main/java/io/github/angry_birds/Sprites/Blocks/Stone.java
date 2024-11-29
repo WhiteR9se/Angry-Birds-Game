@@ -15,13 +15,15 @@ public class Stone implements Serializable {
     private int hitCount;
     public boolean markedForRemoval;
     public static List<Stone> stones = new ArrayList<>();
+    private String name;
 
 
-    public Stone(World world, float x, float y) {
+    public Stone(World world, float x, float y, String name) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
+        this.name = name;
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(11f, 124f, new Vector2(0.5f, 0.5f), 0); // Set size to 22x248
@@ -77,9 +79,21 @@ public class Stone implements Serializable {
     public void setBodyNull() {
         body = null;
     }
+    public Vector2 getXY(){
+        return new Vector2(body.getPosition().x, body.getPosition().y);
+    }
 
     public void dispose() {
         texture.dispose();
         damagedTexture.dispose();
     }
+
+    public void setHit(int hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

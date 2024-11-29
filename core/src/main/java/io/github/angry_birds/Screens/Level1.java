@@ -16,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Timer;
 import io.github.angry_birds.Core;
-import io.github.angry_birds.Physics.GameState;
 import io.github.angry_birds.Sprites.Birds.CurrentBird;
 import io.github.angry_birds.Sprites.Birds.Red;
 import io.github.angry_birds.Sprites.Birds.Chuck;
@@ -27,6 +26,8 @@ import io.github.angry_birds.Sprites.Pigs.Foreman;
 import io.github.angry_birds.Sprites.Pigs.Minion;
 import io.github.angry_birds.Sprites.Sling;
 import io.github.angry_birds.Sprites.level1Structure;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,9 +59,8 @@ public class Level1 implements Screen {
     public level1Structure L1;
     private boolean isGameSettingScreenVisible;
     public static ArrayList<Body> destroyedBodies = new ArrayList<>() ;
-    private GameState gameState;
-    private int currentLevel;
     private boolean isWin, isLose = false;
+    public ArrayList<String> gameObjects = new ArrayList<>();
 
 
     public Level1(Core game) {
@@ -81,8 +81,6 @@ public class Level1 implements Screen {
         terence = new Terence(world, 150, 180);
 
         isGameSettingScreenVisible = false;
-        gameState = new GameState(red, chuck, terence, sling, minion);
-        currentLevel = 1;
 
     world.setContactListener(new ContactListener() {
     @Override
@@ -251,16 +249,15 @@ public class Level1 implements Screen {
 
 
         // Initialize base birds
-        
+
         //------------------------------------------
         //--------------------------------------------
         birds = new ArrayList<>();
-        birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300)));
-        birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300))); //100, 144
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
-        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300))); //200, 180
+        birds.add(new CurrentBird(red.getBody(), new Vector2(300, 300), "red"));
+        birds.add(new CurrentBird(chuck.getBody(), new Vector2(300, 300), "chuck")); //100, 144
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
+        birds.add(new CurrentBird(terence.getBody(), new Vector2(300, 300), "terence")); //200, 180
 
 
         setCurrentBird(0);
@@ -333,6 +330,7 @@ public class Level1 implements Screen {
             @Override
             public boolean keyDown(int keycode) {
                 if (keycode == Input.Keys.ESCAPE) {
+                    //saveGameState();
                     toggleGameSettingScreen(game);
                 }
                 return true;
@@ -403,7 +401,7 @@ public class Level1 implements Screen {
                             }
                         }
                     }, 5);
-                    
+
                 }
                 return true;
             }
@@ -421,21 +419,79 @@ public class Level1 implements Screen {
         }
     }
 
-    //
-    private void saveGameState(){
-        GameState.saveState(gameState, currentLevel);
-    }
-    private void loadGameState() {
-        gameState = GameState.loadState(currentLevel);
-        // Set the game objects from the loaded game state
-        red = gameState.getRed();
-        chuck = gameState.getChuck();
-        terence = gameState.getTerence();
-        sling = gameState.getSling();
-        minion = gameState.getMinion();
-        // Set other game objects as needed
+    /*private void saveGameState() {
+
+        for (CurrentBird bird : birds) {
+            if (bird != currentBird) {
+                gameObjects.add(bird.getBirdName() + ":" + bird.getBody().getPosition().x + "," + bird.getBody().getPosition().y);
+            }
+        }
+        for (Wood wood : Wood.woods) {
+            gameObjects.add(wood.getName() + ":" + wood.getBody().getPosition().x + "," + wood.getBody().getPosition().y + ":" + wood.getHit());
+        }
+        for (Stone stone : Stone.stones) {
+            gameObjects.add(stone.getName() + ":" + stone.getBody().getPosition().x + "," + stone.getBody().getPosition().y + ":" + stone.getHit());
+        }
+        for (Ice ice : Ice.ices) {
+            gameObjects.add(ice.getName() + ":" + ice.getBody().getPosition().x + "," + ice.getBody().getPosition().y + ":" + ice.getHit());
+        }
+        for (Minion minion : Minion.minions) {
+            gameObjects.add(minion.getName() + ":" + minion.getBody().getPosition().x + "," + minion.getBody().getPosition().y + ":" + minion.getHit());
+        }
+        for (Foreman foreman : Foreman.foremans) {
+            gameObjects.add(foreman.getName() + ":" + foreman.getBody().getPosition().x + "," + foreman.getBody().getPosition().y + ":" + foreman.getHit());
+        }
+        for (Corporal corporal : Corporal.corporals) {
+            gameObjects.add(corporal.getName() + ":" + corporal.getBody().getPosition().x + "," + corporal.getBody().getPosition().y + ":" + corporal.getHit());
+        }
+        String currentBirdInfo = currentBird.getBirdName() + ":" + currentBird.getBody().getPosition().x + "," + currentBird.getBody().getPosition().y;
+        GameState.saveState(currentBirdInfo, gameObjects, 1);
+        System.out.println("Game state saved successfully.");
     }
 
+    void loadGameState() {
+            String[] gameState = GameState.loadState(1);
+            if (gameState != null) {
+                for (String line : gameState) {
+                    String[] parts = line.split(":");
+                    String type = parts[0];
+                    if (parts.length > 1) {
+                        String[] position = parts[1].split(",");
+                        float x = Float.parseFloat(position[0]);
+                        float y = Float.parseFloat(position[1]);
+                        if (type.equals(currentBird.getBirdName())) {
+                            currentBird.getBody().setTransform(x, y, 0);
+                        } else if (type.startsWith("bird")) {
+                            CurrentBird bird = new CurrentBird(world, x, y, type);
+                            bird.setStatic();
+                            birds.add(bird);
+                        } else {
+                           int hitCount = (parts.length > 2) ? Integer.parseInt(parts[2]) : 0;
+                            if (type.startsWith("wood")) {
+                                Wood wood = new Wood(world, x, y, type);
+                                wood.setHit(hitCount);
+                            } else if (type.startsWith("stone")) {
+                                Stone stone = new Stone(world, x, y, type);
+                                stone.setHit(hitCount);
+                            } else if (type.startsWith("ice")) {
+                                Ice ice = new Ice(world, x, y, type);
+                                ice.setHit(hitCount);
+                            } else if (type.startsWith("minion")) {
+                                Minion minion = new Minion(world, x, y, type);
+                                minion.setHit(hitCount);
+                            } else if (type.startsWith("foreman")) {
+                                Foreman foreman = new Foreman(world, x, y, type);
+                                foreman.setHit(hitCount);
+                            } else if (type.startsWith("corporal")) {
+                                Corporal corporal = new Corporal(world, x, y, type);
+                                corporal.setHit(hitCount);
+                            }
+                        }
+                    }
+                }
+            }
+        gameObjects.clear();
+    }*/
 
     private void toggleWinScreen(Core game){
         makeWinYes();
@@ -470,13 +526,9 @@ public class Level1 implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        /*for(int i= 0;i<timeDelay.size();i++){
-            timeDelay.set(i, timeDelay.get(i)-delta);
-        }*/
         for(int i = 0; i<10; i++) {
             world.step(1 / 60f, 6, 2);
         }
-        //world.step(1/60f, 6, 2);
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         if (gameSetting.getBoundingRectangle().contains(mouseX, mouseY)) {
@@ -496,8 +548,10 @@ public class Level1 implements Screen {
         L1.render(batch);
        toggleWinScreen(game);
        toggleLoseScreen(game);
-
-
+        if(isGameSettingScreenVisible){
+               //saveGameState();
+            toggleGameSettingScreen(game);
+        }
         batch.end();
 
             debugRenderer.render(world, camera.combined);

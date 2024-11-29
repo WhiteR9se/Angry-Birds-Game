@@ -17,14 +17,14 @@ public class level2Structure {
     public   Minion minion1;
     public  Foreman foreman1, foreman2;
     public level2Structure(World world) {
-        stone1 = new Stone(world,1260, 144);
-        wood1 = new Wood(world, 1200, 144);
-        foreman1 = new Foreman(world, 1341, 144);
-        ice1 = new Ice(world,1440, 144);
-        ice2 = new Ice(world, 1440, 144+60);
-        ice3 = new Ice(world, 1440, 144+120);
-        minion1 = new Minion(world, 1200,144+240);
-        foreman2 = new Foreman(world, 1600, 144);
+        stone1 = new Stone(world,1260, 144, "stone1");
+        wood1 = new Wood(world, 1200, 144, "wood1");
+        foreman1 = new Foreman(world, 1341, 144, "foreman1");
+        ice1 = new Ice(world,1440, 144, "ice1");
+        ice2 = new Ice(world, 1440, 144+60, "ice2");
+        ice3 = new Ice(world, 1440, 144+120, "ice3");
+        minion1 = new Minion(world, 1200,144+240, "minion1");
+        foreman2 = new Foreman(world, 1600, 144,"foreman2");
     }
     public void render(SpriteBatch batch){
         wood1.render(batch);

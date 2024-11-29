@@ -18,13 +18,15 @@ public class Foreman implements Serializable {
     private int hitCount;
     public boolean markedForRemoval;
     public static List<Foreman> foremans = new ArrayList<>();
+    private String name;
 
 
-    public Foreman(World world, float x, float y) {
+    public Foreman(World world, float x, float y, String name) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
+        this.name = name;
 
         CircleShape shape = new CircleShape();
         shape.setRadius(30f);
@@ -72,6 +74,9 @@ public class Foreman implements Serializable {
     public Body getBody() {
         return body;
     }
+    public Vector2 getXY(){
+        return new Vector2(body.getPosition().x, body.getPosition().y);
+    }
 
     public void setBodyNull(){
         body = null;
@@ -79,5 +84,13 @@ public class Foreman implements Serializable {
     public void dispose() {
         texture.dispose();
         damagedTexture.dispose();
+    }
+
+    public void setHit(int hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    public String getName() {
+        return name;
     }
 }

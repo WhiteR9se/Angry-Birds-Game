@@ -15,21 +15,21 @@ public class level3Structure {
     private Stone stone1, stone2;
     private Ice ice1, ice2, ice3, ice4;
     public  Minion minion1;
-    public Foreman foreman1, foreman2;
+    public Foreman foreman1;
     public Corporal corporal1, corporal2;
     public level3Structure(World world) {
-        stone1 = new Stone(world,1200, 144);
-        stone2 = new Stone(world, 1360, 144);
-        wood1 = new Wood(world, 1460, 144);
-        wood2 = new Wood(world, 1460, 144+60);
-        ice1 = new Ice(world, 1550, 144);
-        ice2 = new Ice(world, 1550, 144+60);
-        ice3 = new Ice(world, 1550, 144+120);
-        ice4 = new Ice(world, 1550, 144+180);
-        corporal1 = new Corporal(world, 1460, 144+120);
-        foreman1 = new Foreman(world, 1700, 144);
-        corporal2 = new Corporal(world, 1280, 144);
-        minion1 = new Minion(world, 1400,144);
+        stone1 = new Stone(world,1200, 144, "stone1");
+        stone2 = new Stone(world, 1360, 144, "stone2");
+        wood1 = new Wood(world, 1460, 144, "wood1");
+        wood2 = new Wood(world, 1460, 144+60, "wood2");
+        ice1 = new Ice(world, 1550, 144, "ice1");
+        ice2 = new Ice(world, 1550, 144+60, "ice2");
+        ice3 = new Ice(world, 1550, 144+120, "ice3");
+        ice4 = new Ice(world, 1550, 144+180, "ice4");
+        corporal1 = new Corporal(world, 1460, 144+120, "corporal1");
+        foreman1 = new Foreman(world, 1700, 144, "foreman1");
+        corporal2 = new Corporal(world, 1280, 144, "corporal2");
+        minion1 = new Minion(world, 1400,144, "minion1");
     }
     public void render(SpriteBatch batch){
         wood1.render(batch); wood2.render(batch);

@@ -15,13 +15,15 @@ public class Ice implements Serializable {
     private int hitCount;
     public boolean markedForRemoval;
     public static List<Ice> ices = new ArrayList<>();
+    private String name;
 
 
-    public Ice(World world, float x, float y) {
+    public Ice(World world, float x, float y, String name) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
+        this.name = name;
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
@@ -66,11 +68,22 @@ public class Ice implements Serializable {
     public Body getBody() {
         return body;
     }
+    public Vector2 getXY(){
+        return new Vector2(body.getPosition().x, body.getPosition().y);
+    }
 
     public void setBodyNull(){
         body = null;
     }
     public void dispose() {
         texture.dispose();
+    }
+
+    public void setHit(int hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    public String getName() {
+        return name;
     }
 }

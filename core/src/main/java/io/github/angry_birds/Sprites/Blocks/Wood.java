@@ -16,12 +16,14 @@ public class Wood implements Serializable {
     private int hitCount;
     public boolean markedForRemoval;
     public static List<Wood> woods = new ArrayList<>();
+    private String name;
 
-    public Wood(World world, float x, float y) {
+    public Wood(World world, float x, float y, String name) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
+        this.name = name;
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(30f, 30f, new Vector2(0.5f, 0.5f), 0); // Set size to 60x60
@@ -75,8 +77,20 @@ public class Wood implements Serializable {
         body = null;
     }
 
+    public Vector2 getXY(){
+        return new Vector2(body.getPosition().x, body.getPosition().y);
+    }
+
     public void dispose() {
         texture.dispose();
         damagedTexture.dispose();
+    }
+
+    public void setHit(int hitCount) {
+        this.hitCount = hitCount;
+    }
+
+    public String getName() {
+        return name;
     }
 }
